@@ -1,8 +1,12 @@
 module Git2
   @[Link("git2")]
   lib LibGit2
-    alias Int = ::LibC::Int
-    alias UInt = ::LibC::UInt
+    alias Int = LibC::Int
+    alias UInt = LibC::UInt
+    alias UInt16T = LibC::UInt16T
+    alias UInt32T = LibC::UInt32T
+    alias UInt64T = LibC::UInt64T
+    alias Int64T = LibC::Int64T
 
     alias GitAnnotatedCommit = Void
     alias GitBlame = Void
@@ -62,6 +66,9 @@ module Git2
     alias GitTreeEntry = Void
     alias GitTreebuilder = Void
     alias GitWorktree = Void
+    alias GitObjectSizeT = UInt64T
+    alias GitOffT = Int64T
+    alias GitTimeT = Int64T
 
     @[Flags]
     enum GitApplyFlagsT
@@ -798,6 +805,257 @@ module Git2
     enum GitStreamT
       GIT_STREAM_STANDARD = 1
       GIT_STREAM_TLS
+    end
+
+    enum GitSubmoduleIgnoreT
+      GIT_SUBMODULE_IGNORE_UNSPECIFIED = -1
+      GIT_SUBMODULE_IGNORE_NONE        =  1
+      GIT_SUBMODULE_IGNORE_UNTRACKED
+      GIT_SUBMODULE_IGNORE_DIRTY
+      GIT_SUBMODULE_IGNORE_ALL
+    end
+
+    enum GitSubmoduleRecurseT
+      GIT_SUBMODULE_RECURSE_NO
+      GIT_SUBMODULE_RECURSE_YES
+      GIT_SUBMODULE_RECURSE_ONDEMAND
+    end
+
+    @[Flags]
+    enum GitSubmoduleStatusT
+      GIT_SUBMODULE_STATUS_IN_HEAD
+      GIT_SUBMODULE_STATUS_IN_INDEX
+      GIT_SUBMODULE_STATUS_IN_CONFIG
+      GIT_SUBMODULE_STATUS_IN_WD
+      GIT_SUBMODULE_STATUS_INDEX_ADDED
+      GIT_SUBMODULE_STATUS_INDEX_DELETED
+      GIT_SUBMODULE_STATUS_INDEX_MODIFIED
+      GIT_SUBMODULE_STATUS_WD_UNINITIALIZED
+      GIT_SUBMODULE_STATUS_WD_ADDED
+      GIT_SUBMODULE_STATUS_WD_DELETED
+      GIT_SUBMODULE_STATUS_WD_MODIFIED
+      GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED
+      GIT_SUBMODULE_STATUS_WD_WD_MODIFIED
+      GIT_SUBMODULE_STATUS_WD_UNTRACKED
+    end
+
+    enum GitSubmoduleUpdateT
+      GIT_SUBMODULE_UPDATE_CHECKOUT
+      GIT_SUBMODULE_UPDATE_REBASE
+      GIT_SUBMODULE_UPDATE_MERGE
+      GIT_SUBMODULE_UPDATE_NONE
+      GIT_SUBMODULE_UPDATE_DEFAULT  = 0
+    end
+
+    enum GitTraceLevelT
+      GIT_TRACE_NONE
+      GIT_TRACE_FATAL
+      GIT_TRACE_ERROR
+      GIT_TRACE_WARN
+      GIT_TRACE_INFO
+      GIT_TRACE_DEBUG
+      GIT_TRACE_TRACE
+    end
+
+    enum GitTreeUpdateT
+      GIT_TREE_UPDATE_UPSERT
+      GIT_TREE_UPDATE_REMOVE
+    end
+
+    enum GitTreewalkMode
+      GIT_TREEWALK_PRE
+      GIT_TREEWALK_POST
+    end
+
+    @[Flags]
+    enum GitWorktreePruneT : UInt
+      GIT_WORKTREE_PRUNE_VALID
+      GIT_WORKTREE_PRUNE_LOCKED
+      GIT_WORKTREE_PRUNE_WORKING_TREE
+    end
+
+    struct GitOid
+      id : LibC::Char[20]
+    end
+
+    struct GitDiffFile
+      id : GitOid
+      path : LibC::Char*
+      size : GitObjectSizeT
+      flags : UInt32T
+      mode, id_abbrev : UInt16T
+    end
+
+    struct GitDiffDelta
+      status : GitDeltaT
+      flags : UInt16T
+      similarity, nfiles : UInt32T
+      old_file, new_file : GitDiffFile
+    end
+
+    struct GitDiffHunk
+      old_start, old_lines, new_start, new_lines : Int
+      header_len : LibC::SizeT
+      header : LibC::Char[128]
+    end
+
+    struct GitCert
+      cert_type : GitCertT
+    end
+
+    struct GitCheckoutPerfdata
+      mkdir_calls, stat_calls, chmod_calls : LibC::SizeT
+    end
+
+    struct GitBuf
+      ptr : LibC::Char*
+      asize, size : LibC::SizeT
+    end
+
+    struct GitConfigEntry
+      name, value : LibC::Char*
+      include_depth : UInt
+      level : GitConfigLevelT
+      free : GitConfigEntry* -> Void
+      payload : Void*
+    end
+
+    struct GitRemoteHead
+      local : Int
+      oid, loid : GitOid
+      name, symref_target : LibC::Char*
+    end
+
+    struct GitDiffBinaryFile
+      type : GitDiffBinaryT
+      data : LibC::Char*
+      datalen, inflatedlen : LibC::SizeT
+    end
+
+    struct GitDiffBinary
+      contains_data : UInt
+      old_file, new_file : GitDiffBinaryFile
+    end
+
+    struct GitDiffLine
+      origin : LibC::Char
+      old_lineno, new_lineno, num_lines : Int
+      content_line : LibC::SizeT
+      content_offset : GitOffT
+      content : LibC::Char*
+    end
+
+    struct GitIndexerProgress
+      total_objects, indexed_objects, received_objects, local_objects, total_deltas, indexed_deltas : UInt
+      received_bytes : LibC::SizeT
+    end
+
+    struct GitPushUpdate
+      src_refname, dst_refname : LibC::Char*
+      src, dst : GitOid
+    end
+
+    alias GitApplyDeltaCb = GitDiffDelta*, Void* -> Int
+    alias GitApplyHunkCb = GitDiffHunk*, Void* -> Int
+    alias GitAttrForeachCb = LibC::Char*, LibC::Char*, Void* -> Int
+    alias GitTransportCertificateCheckCb = GitCert*, Int, LibC::Char*, Void* -> Int
+    alias GitCheckoutNotifyCb = GitCheckoutNotifyT, LibC::Char*, GitDiffFile*, GitDiffFile*, GitDiffFile*, Void* -> Int
+    alias GitCheckoutProgressCb = LibC::Char*, LibC::SizeT, LibC::SizeT, Void* -> Void
+    alias GitCheckoutPerfdataCb = GitCheckoutPerfdata*, Void* -> Void
+    alias GitRemoteCreateCb = GitRemote**, GitRepository*, LibC::Char*, LibC::Char*, Void* -> Int
+    alias GitRepositoryCreateCb = GitRepository**, LibC::Char*, Int, Void* -> Int
+    alias GitCommitSigningCb = GitBuf*, GitBuf*, LibC::Char*, Void* -> Int
+    alias GitConfigForeachCb = GitConfigEntry*, Void* -> Int
+    alias GitCredentialAcquireCb = GitCredential**, LibC::Char*, LibC::Char*, UInt, Void* -> Int
+    alias GitHeadlistCb = GitRemoteHead*, Void* -> Int
+    alias GitDiffNotifyCb = GitDiff*, GitDiffDelta*, LibC::Char*, Void* -> Int
+    alias GitDiffProgressCb = GitDiff*, LibC::Char*, LibC::Char*, Void* -> Int
+    alias GitDiffFileCb = GitDiffDelta*, LibC::Float, Void* -> Int
+    alias GitDiffBinaryCb = GitDiffDelta*, GitDiffBinary*, Void* -> Int
+    alias GitDiffHunkCb = GitDiffDelta*, GitDiffHunk*, Void* -> Int
+    alias GitDiffLineCb = GitDiffDelta*, GitDiffHunk*, GitDiffLine*, Void* -> Int
+    alias GitIndexMatchedPathCb = LibC::Char*, LibC::Char*, Void* -> Int
+    alias GitIndexerProgressCb = GitIndexerProgress*, Void* -> Int
+    alias GitNoteForeachCb = GitOid*, GitOid*, Void* -> Int
+    alias GitOdbForeachCb = GitOid*, Void* -> Int
+    alias GitPackbuilderForeachCb = Void*, LibC::SizeT, Void* -> Int
+    alias GitPackbuilderProgress = Int, UInt32T, UInt32T, Void* -> Int
+    alias GitReferenceForeachCb = GitReference*, Void* -> Int
+    alias GitReferenceForeachNameCb = LibC::Char*, Void* -> Int
+    alias GitPushTransferProgressCb = UInt, UInt, LibC::SizeT, Void* -> Int
+    alias GitPushNegotiation = GitPushUpdate**, LibC::SizeT, Void* -> Int
+    alias GitPushUpdateReferenceCb = LibC::Char*, LibC::Char*, Void* -> Int
+    alias GitUrlResolveCb = GitBuf*, LibC::Char*, Int, Void* -> Int
+    alias GitRepositoryFetchheadForeachCb = LibC::Char*, LibC::Char*, GitOid*, UInt, Void* -> Int
+    alias GitRepositoryMergeheadForeachCb = GitOid*, Void* -> Int
+    alias GitRevwalkHideCb = GitOid*, Void* -> Int
+    alias GitStashApplyProgressCb = GitStashApplyProgressT, Void* -> Int
+    alias GitStashCb = LibC::SizeT, LibC::Char*, GitOid*, Void* -> Int
+    alias GitStatusCb = LibC::Char*, UInt, Void* -> Int
+    alias GitSubmoduleCb = GitSubmodule*, LibC::Char*, Void* -> Int
+    alias GitTagForeachCb = LibC::Char*, GitOid*, Void* -> Int
+    alias GitTraceCb = GitTraceLevelT, LibC::Char* -> Void
+    alias GitTransportMessageCb = LibC::Char*, Int, Void* -> Int
+    alias GitTransportCb = GitTransport**, GitRemote*, Void* -> Int
+    alias GitTreebuilderFilterCb = GitTreeEntry*, Void* -> Int
+    alias GitTreewalkCb = LibC::Char*, GitTreeEntry*, Void* -> Int
+
+    struct GitApplyOptions
+      version : UInt
+      delta_cb : GitApplyDeltaCb
+      hunk_cb : GitApplyHunkCb
+      payload : Void*
+      flags : UInt
+    end
+
+    struct GitTime
+      time : GitTimeT
+      offset : Int
+      sign : LibC::Char
+    end
+
+    struct GitSignature
+      name, email : LibC::Char*
+      when_t : GitTime
+    end
+
+    struct GitBlameHunk
+      lines_in_hunk : LibC::SizeT
+      final_commit_id : GitOid
+      final_start_line_number : LibC::SizeT
+      final_signature : GitSignature*
+      orig_commit_id : GitOid
+      orig_path : LibC::Char*
+      orig_start_line_number : LibC::SizeT
+      git_signature : GitSignature*
+      boundary : LibC::Char
+    end
+
+    struct GitBlameOptions
+      version : UInt
+      flags : UInt32T
+      min_match_characters : UInt16T
+      newest_commit, oldest_commit : GitOid
+      min_line, max_line : LibC::SizeT
+    end
+
+    struct GitBlobFilterOptions
+      version : Int
+      flags : UInt32T
+    end
+
+    struct GitCertHostkey
+      parent : GitCert
+      type : GitCertSshT
+      hash_md5 : LibC::Char[16]
+      hash_sha1 : LibC::Char[20]
+      hash_sha256 : LibC::Char[32]
+    end
+
+    struct GitCertX509
+      parent : GitCert
+      data : Void*
+      len : LibC::SizeT
     end
 
     fun git_libgit2_features : Int
