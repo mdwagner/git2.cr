@@ -1508,6 +1508,50 @@ module Git2
     fun git_commit_tree(tree_out : GitTree**, commit : GitCommit*) : Int
     fun git_commit_tree_id(commit : GitCommit*) : GitOid*
 
+    fun git_config_add_file_ondisk(cfg : GitConfig*, path : LibC::Char*, level : GitConfigLevelT, repo : GitRepository*, force : Int) : Int
+    fun git_config_backend_foreach_match(backend : GitConfigBackend*, regexp : LibC::Char*, callback : GitConfigForeachCb, payload : Void*) : Int
+    fun git_config_delete_entry(cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_delete_multivar(cfg : GitConfig*, name : LibC::Char*, regexp : LibC::Char*) : Int
+    fun git_config_entry_free(entry : GitConfigEntry*) : Void
+    fun git_config_find_global(out_ptr : GitBuf*) : Int
+    fun git_config_find_programdata(out_ptr : GitBuf*) : Int
+    fun git_config_find_system(out_ptr : GitBuf*) : Int
+    fun git_config_find_xdg(out_ptr : GitBuf*) : Int
+    fun git_config_foreach(cfg : GitConfig*, callback : GitConfigForeachCb, payload : Void*) : Int
+    fun git_config_foreach_match(cfg : GitConfig*, regexp : LibC::Char*, callback : GitConfigForeachCb, payload : Void*) : Int
+    fun git_config_free(cfg : GitConfig*) : Void
+    fun git_config_get_bool(out_ptr : Int*, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_entry(out_ptr : GitConfigEntry**, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_int32(out_ptr : Int32T*, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_int64(out_ptr : Int64T*, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_mapped(out_ptr : Int*, cfg : GitConfig*, name : LibC::Char*, maps : GitConfigmap*, map_n : LibC::SizeT) : Int
+    fun git_config_get_multivar_foreach(cfg : GitConfig*, name : LibC::Char*, regexp : LibC::Char*, callback : GitConfigForeachCb, payload : Void*) : Int
+    fun git_config_get_path(out_ptr : GitBuf*, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_string(out_ptr : LibC::Char**, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_get_string_buf(out_ptr : GitBuf*, cfg : GitConfig*, name : LibC::Char*) : Int
+    fun git_config_iterator_free(iter : GitConfigIterator*) : Void
+    fun git_config_iterator_glob_new(out_ptr : GitConfigIterator**, cfg : GitConfig*, regexp : LibC::Char*) : Int
+    fun git_config_iterator_new(out_ptr : GitConfigIterator**, cfg : GitConfig*) : Int
+    fun git_config_lock(tx : GitTransaction**, cfg : GitConfig*) : Int
+    fun git_config_lookup_map_value(out_ptr : Int*, maps : GitConfigmap*, map_n : LibC::SizeT, value : LibC::Char*) : Int
+    fun git_config_multivar_iterator_new(out_ptr : GitConfigIterator**, cfg : GitConfig*, name : LibC::Char*, regexp : LibC::Char*) : Int
+    fun git_config_new(out_ptr : GitConfig**) : Int
+    fun git_config_next(entry : GitConfigEntry**, iter : GitConfigIterator*) : Int
+    fun git_config_open_default(out_ptr : GitConfig**) : Int
+    fun git_config_open_global(out_ptr : GitConfig**, config : GitConfig*) : Int
+    fun git_config_open_level(out_ptr : GitConfig**, parent : GitConfig*, level : GitConfigLevelT) : Int
+    fun git_config_open_ondisk(out_ptr : GitConfig**, path : LibC::Char*) : Int
+    fun git_config_parse_bool(out_ptr : Int*, value : LibC::Char*) : Int
+    fun git_config_parse_int32(out_ptr : Int32T*, value : LibC::Char*) : Int
+    fun git_config_parse_int64(out_ptr : Int64T*, value : LibC::Char*) : Int
+    fun git_config_parse_path(out_ptr : GitBuf*, value : LibC::Char*) : Int
+    fun git_config_set_bool(cfg : GitConfig*, name : LibC::Char*, value : Int) : Int
+    fun git_config_set_int32(cfg : GitConfig*, name : LibC::Char*, value : Int32T) : Int
+    fun git_config_set_int64(cfg : GitConfig*, name : LibC::Char*, value : Int64T) : Int
+    fun git_config_set_multivar(cfg : GitConfig*, name : LibC::Char*, regexp : LibC::Char*, value : LibC::Char*) : Int
+    fun git_config_set_string(cfg : GitConfig*, name : LibC::Char*, value : LibC::Char*) : Int
+    fun git_config_snapshot(out_ptr : GitConfig**, config : GitConfig*) : Int
+
     fun git_libgit2_features : Int
     fun git_libgit2_init : Int
     fun git_libgit2_opts(option : Int) : Int
