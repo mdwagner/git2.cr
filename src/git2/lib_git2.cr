@@ -6,7 +6,9 @@ module Git2
     alias UInt16T = LibC::UInt16T
     alias UInt32T = LibC::UInt32T
     alias UInt64T = LibC::UInt64T
+    alias Int32T = LibC::Int32T
     alias Int64T = LibC::Int64T
+    alias UShort = LibC::UShort
 
     alias GitAnnotatedCommit = Void
     alias GitBlame = Void
@@ -1056,6 +1058,342 @@ module Git2
       parent : GitCert
       data : Void*
       len : LibC::SizeT
+    end
+
+    struct GitStrarray
+      strings : LibC::Char**
+      count : LibC::SizeT
+    end
+
+    struct GitCheckoutOptions
+      version, checkout_strategy : UInt
+      disable_filters : Int
+      dir_mode, file_mode : UInt
+      file_open_flags : Int
+      notify_flags : UInt
+      notify_cb : GitCheckoutNotifyCb
+      notify_payload : Void*
+      progress_cb : GitCheckoutProgressCb
+      progress_payload : Void*
+      paths : GitStrarray
+      baseline : GitTree*
+      baseline_index : GitIndex*
+      target_directory, ancestor_label, our_label, their_label : LibC::Char*
+      perfdata_cb : GitCheckoutPerfdataCb
+      perfdata_payload : Void*
+    end
+
+    struct GitDiffSimilarityMetric
+      file_signature : Void**, GitDiffFile*, LibC::Char*, Void* -> Int
+      buffer_signature : Void**, GitDiffFile*, LibC::Char*, LibC::SizeT, Void* -> Int
+      free_signature : Void*, Void* -> Void
+      similarity : Int*, Void*, Void*, Void* -> Int
+      payload : Void*
+    end
+
+    struct GitMergeOptions
+      version : UInt
+      flags : UInt32T
+      rename_threshold, target_limit : UInt
+      metric : GitDiffSimilarityMetric*
+      recursion_limit : UInt
+      default_driver : LibC::Char*
+      file_favor : GitMergeFileFavorT
+      file_flags : UInt32T
+    end
+
+    struct GitCherrpickOptions
+      version, mainline : UInt
+      merge_opts : GitMergeOptions
+      checkout_opts : GitCheckoutOptions
+    end
+
+    struct GitRemoteCallbacks
+      version : UInt
+      sideband_progress : GitTransportMessageCb
+      completion : GitRemoteCompletionT, Void* -> Int
+      credentials : GitCredentialAcquireCb
+      certificate_check : GitTransportCertificateCheckCb
+      transfer_progress : GitIndexerProgressCb
+      update_tips : LibC::Char*, GitOid*, GitOid*, Void* -> Int
+      pack_progress : GitPackbuilderProgress
+      push_transfer_progress : GitPushTransferProgressCb
+      push_update_reference : GitPushUpdateReferenceCb
+      push_negotiation : GitPushNegotiation
+      transport : GitTransportCb
+      payload : Void*
+      resolve_url : GitUrlResolveCb
+    end
+
+    struct GitProxyOptions
+      version : UInt
+      type : GitProxyT
+      url : LibC::Char*
+      credentials : GitCredentialAcquireCb
+      certificate_check : GitTransportCertificateCheckCb
+      payload : Void*
+    end
+
+    struct GitFetchOptions
+      version : UInt
+      callbacks : GitRemoteCallbacks
+      prune : GitFetchPruneT
+      update_fetchhead : Int
+      download_tags : GitRemoteAutotagOptionT
+      proxy_opts : GitProxyOptions
+      custom_headers : GitStrarray
+    end
+
+    struct GitCloneOptions
+      version : UInt
+      checkout_opts : GitCheckoutOptions
+      fetch_opts : GitFetchOptions
+      bare : Int
+      local : GitCloneLocalT
+      checkout_branch : LibC::Char*
+      repository_cb : GitRepositoryCreateCb
+      repository_cb_payload : Void*
+      remote_cb : GitRemoteCreateCb
+      remote_cb_payload : Void*
+    end
+
+    struct GitConfigmap
+      type : GitConfigmapT
+      str_match : LibC::Char*
+      map_value : Int
+    end
+
+    struct GitCredentialUserpassPayload
+      username, password : LibC::Char*
+    end
+
+    struct GitDescribeFormatOptions
+      version, abbreviated_size : UInt
+      always_use_long_format : Int
+      dirty_suffix : LibC::Char*
+    end
+
+    struct GitDiffFindOptions
+      version : UInt
+      flags : UInt32T
+      rename_threshold : UInt16T
+      rename_from_rewrite_threshold, copy_threshold, break_rewrite_threshold : UInt16T
+      rename_limit : LibC::SizeT
+      metric : GitDiffSimilarityMetric*
+    end
+
+    struct GitDiffFormatEmailOptions
+      version : UInt
+      flags : UInt32T
+      patch_no, total_patches : LibC::SizeT
+      id : GitOid*
+      summary, body : LibC::Char*
+      author : GitSignature*
+    end
+
+    struct GitDiffOptions
+      version : UInt
+      flags : UInt32T
+      ignore_submodules : GitSubmoduleIgnoreT
+      pathspec : GitStrarray
+      notify_cb : GitDiffNotifyCb
+      progress_cb : GitDiffProgressCb
+      payload : Void*
+      context_lines, interhunk_lines : UInt32T
+      id_abbrev : UInt16T
+      max_size : GitOffT
+      old_prefix, new_prefix : LibC::Char*
+    end
+
+    struct GitDiffPatchidOptions
+      version : UInt
+    end
+
+    struct GitError
+      message : LibC::Char*
+      klass : Int
+    end
+
+    struct GitIndexTime
+      seconds : Int32T
+      nanoseconds : UInt32T
+    end
+
+    struct GitIndexEntry
+      ctime, mtime : GitIndexTime
+      dev, ino, mode, uid, gid, file_size : UInt32T
+      id : GitOid
+      flags, flags_extended : UInt16T
+      path : LibC::Char*
+    end
+
+    struct GitIndexerOptions
+      version : UInt
+      progress_cb : GitIndexerProgressCb
+      progress_cb_payload : Void*
+      verify : LibC::Char
+    end
+
+    struct GitMergeFileInput
+      version : UInt
+      ptr : LibC::Char*
+      size : LibC::SizeT
+      path : LibC::Char*
+      mode : UInt
+    end
+
+    struct GitMergeFileOptions
+      version : UInt
+      ancestor_label, our_label, their_label : LibC::Char*
+      favor : GitMergeFileFavorT
+      flags : UInt32T
+      marker_size : UShort
+    end
+
+    struct GitMergeFileResult
+      automergeable : UInt
+      path : LibC::Char*
+      mode : UInt
+      ptr : LibC::Char*
+      len : LibC::SizeT
+    end
+
+    struct GitMessageTrailer
+      key, value : LibC::Char*
+    end
+
+    struct GitMessageTrailerArray
+      trailers : GitMessageTrailer*
+      count : LibC::SizeT
+      trailer_block : LibC::Char*
+    end
+
+    struct GitOdbExpandId
+      id : GitOid
+      length : UShort
+      type : GitObjectT
+    end
+
+    struct GitOdbStream
+      backend : GitOdbBackend*
+      mode : UInt
+      hash_ctx : Void*
+      declared_size, received_bytes : GitObjectSizeT
+      read : GitOdbStream*, LibC::Char*, LibC::SizeT -> Int
+      write : GitOdbStream*, LibC::Char*, LibC::SizeT -> Int
+      finalized_write : GitOdbStream*, GitOid* -> Int
+      free : GitOdbStream* -> Void
+    end
+
+    struct GitOdbWritepack
+      backend : GitOdbBackend*
+      append : GitOdbWritepack*, Void*, LibC::SizeT, GitIndexerProgress* -> Int
+      commit : GitOdbWritepack*, GitIndexerProgress* -> Int
+      free : GitOdbWritepack* -> Void
+    end
+
+    struct GitOidarray
+      ids : GitOid*
+      count : LibC::SizeT
+    end
+
+    struct GitPushOptions
+      version, pb_parallelism : UInt
+      callbacks : GitRemoteCallbacks
+      proxy_opts : GitProxyOptions
+      custom_headers : GitStrarray
+    end
+
+    struct GitRebaseOperation
+      type : GitRebaseOperationT
+      id : GitOid
+      exec : LibC::Char*
+    end
+
+    struct GitRebaseOptions
+      version : UInt
+      quiet, inmemory : Int
+      rewrite_notes_ref : LibC::Char*
+      merge_options : GitMergeOptions
+      checkout_options : GitCheckoutOptions
+      signing_cb : GitCommitSigningCb
+      payload : Void*
+    end
+
+    struct GitRemoteCreateOptions
+      version : UInt
+      repository : GitRepository*
+      name, fetchspec : LibC::Char*
+      flags : UInt
+    end
+
+    struct GitRepositoryInitOptions
+      version : UInt
+      flags, mode : UInt32T
+      workdir_path, description, template_path, initial_head, origin_url : LibC::Char*
+    end
+
+    struct GitRevertOptions
+      version, mainline : UInt
+      merge_opts : GitMergeOptions
+      checkout_opts : GitCheckoutOptions
+    end
+
+    struct GitRevspec
+      from, to : GitObject*
+      flags : UInt
+    end
+
+    struct GitStashApplyOptions
+      version : UInt
+      flags : UInt32T
+      checkout_options : GitCheckoutOptions
+      progress_cb : GitStashApplyProgressCb
+      progress_payload : Void*
+    end
+
+    struct GitStashEntry
+      status : GitStatusT
+      head_to_index, index_to_workdir : GitDiffDelta*
+    end
+
+    struct GitStatusOptions
+      version : UInt
+      show : GitStatusShowT
+      flags : UInt
+      pathspec : GitStrarray
+      baseline : GitTree*
+    end
+
+    struct GitSubmoduleUpdateOptions
+      version : UInt
+      checkout_opts : GitCheckoutOptions
+      fetch_opts : GitFetchOptions
+      allow_fetch : Int
+    end
+
+    struct GitTreeUpdate
+      action : GitTreeUpdateT
+      id : GitOid
+      filemode : GitFilemodeT
+      path : LibC::Char*
+    end
+
+    struct GitWorktreeAddOptions
+      version : UInt
+      lock : Int
+      ref : GitReference*
+    end
+
+    struct GitWorktreePruneOptions
+      version : UInt
+      flags : UInt32T
+    end
+
+    struct GitWritestream
+      write : GitWritestream*, LibC::Char*, LibC::SizeT -> Int
+      close : GitWritestream* -> Int
+      free : GitWritestream* -> Void
     end
 
     fun git_libgit2_features : Int
