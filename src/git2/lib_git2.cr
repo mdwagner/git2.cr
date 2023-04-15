@@ -1396,6 +1396,33 @@ module Git2
       free : GitWritestream* -> Void
     end
 
+    fun git_annotated_commit_free(commit : GitAnnotatedCommit*) : Void
+    fun git_annotated_commit_from_fetchhead(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, branch_name : LibC::Char*, remote_url : LibC::Char*, id : GitOid*) : Int
+    fun git_annotated_commit_from_ref(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, ref : GitReference*) : Int
+    fun git_annotated_commit_from_revspec(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, revspec : LibC::Char*) : Int
+    fun git_annotated_commit_id(commit : GitAnnotatedCommit*) : GitOid*
+    fun git_annotated_commit_lookup(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, id : GitOid*) : Int
+    fun git_annotated_commit_ref(commit : GitAnnotatedCommit*) : LibC::Char*
+
+    fun git_apply(repo : GitRepository*, diff : GitDiff*, location : GitApplyLocationT, options : GitApplyOptions*) : Int
+    fun git_apply_to_tree(out_ptr : GitIndex**, repo : GitRepository*, preimage : GitTree*, diff : GitDiff*, options : GitApplyOptions*) : Int
+
+    fun git_attr_add_macro(repo : GitRepository*, name : LibC::Char*, values : LibC::Char*) : Int
+    fun git_attr_cache_flush(repo : GitRepository*) : Int
+    fun git_attr_foreach(repo : GitRepository*, flags : UInt32T, path : LibC::Char*, callback : GitAttrForeachCb, payload : Void*) : Int
+    fun git_attr_get(value_out : LibC::Char**, repo : GitRepository*, flags : UInt32T, path : LibC::Char*, name : LibC::Char*) : Int
+    fun git_attr_get_many(values_out : LibC::Char**, repo : GitRepository*, flags : UInt32T, path : LibC::Char*, num_attr : LibC::SizeT, names : LibC::Char**) : Int
+    fun git_attr_value(attr : LibC::Char*) : GitAttrValueT
+
+    fun git_blame_buffer(out_ptr : GitBlame**, reference : GitBlame*, buffer : LibC::Char*, buffer_len : LibC::SizeT) : Int
+    fun git_blame_file(out_ptr : GitBlame**, repo : GitRepository*, path : LibC::Char*, options : GitBlameOptions*) : Int
+    fun git_blame_free(blame : GitBlame*) : Void
+    fun git_blame_get_hunk_byindex(blame : GitBlame*, index : UInt32T) : GitBlameHunk*
+    fun git_blame_get_hunk_byline(blame : GitBlame*, lineno : LibC::SizeT) : GitBlameHunk*
+    fun git_blame_get_hunk_count(blame : GitBlame*) : UInt32T
+    fun git_blame_init_options(opts : GitBlameOptions*, version : UInt) : Int
+    fun git_blame_options_init(opts : GitBlameOptions*, version : UInt) : Int
+
     fun git_libgit2_features : Int
     fun git_libgit2_init : Int
     fun git_libgit2_opts(option : Int) : Int
