@@ -1102,7 +1102,7 @@ module Git2
       file_flags : UInt32T
     end
 
-    struct GitCherrpickOptions
+    struct GitCherrypickOptions
       version, mainline : UInt
       merge_opts : GitMergeOptions
       checkout_opts : GitCheckoutOptions
@@ -1422,6 +1422,91 @@ module Git2
     fun git_blame_get_hunk_count(blame : GitBlame*) : UInt32T
     fun git_blame_init_options(opts : GitBlameOptions*, version : UInt) : Int
     fun git_blame_options_init(opts : GitBlameOptions*, version : UInt) : Int
+
+    fun git_blob_create_from_buffer(id : GitOid*, repo : GitRepository*, buffer : Void*, len : LibC::SizeT) : Int
+    fun git_blob_create_from_disk(id : GitOid*, repo : GitRepository*, path : LibC::Char*) : Int
+    fun git_blob_create_from_stream(out_ptr : GitWritestream**, repo : GitRepository*, hintpath : LibC::Char*) : Int
+    fun git_blob_create_from_stream_commit(out_ptr : GitOid*, stream : GitWritestream*) : Int
+    fun git_blob_create_from_workdir(id : GitOid*, repo : GitRepository*, relative_path : LibC::Char*) : Int
+    fun git_blob_create_fromworkdir(id : GitOid*, repo : GitRepository*, relative_path : LibC::Char*) : Int
+    fun git_blob_dup(out_ptr : GitBlob**, source : GitBlob*) : Int
+    fun git_blob_filter(out_ptr : GitBuf*, blob : GitBlob*, as_path : LibC::Char*, opts : GitBlobFilterOptions*) : Int
+    fun git_blob_filtered_content(out_ptr : GitBuf*, blob : GitBlob*, as_path : LibC::Char*, check_for_binary_data : Int) : Int
+    fun git_blob_free(blob : GitBlob*) : Void
+    fun git_blob_id(blob : GitBlob*) : GitOid*
+    fun git_blob_is_binary(blob : GitBlob*) : Int
+    fun git_blob_lookup(blob : GitBlob**, repo : GitRepository*, id : GitOid*) : Int
+    fun git_blob_lookup_prefix(blob : GitBlob**, repo : GitRepository*, id : GitOid*, len : LibC::SizeT) : Int
+    fun git_blob_owner(blob : GitBlob*) : GitRepository*
+    fun git_blob_rawcontent(blob : GitBlob*) : Void*
+    fun git_blob_rawsize(blob : GitBlob*) : GitObjectSizeT
+
+    fun git_branch_create(out_ptr : GitReference**, repo : GitRepository*, branch_name : LibC::Char*, target : GitCommit*, force : Int) : Int
+    fun git_branch_create_from_annotated(ref_out : GitReference**, repo : GitRepository*, branch_name : LibC::Char*, commit : GitAnnotatedCommit*, force : Int) : Int
+    fun git_branch_delete(branch : GitReference*) : Int
+    fun git_branch_is_checked_out(branch : GitReference*) : Int
+    fun git_branch_is_head(branch : GitReference*) : Int
+    fun git_branch_iterator_free(iter : GitBranchIterator*) : Void
+    fun git_branch_iterator_new(out_ptr : GitBranchIterator**, repo : GitRepository*, list_flags : GitBranchT) : Int
+    fun git_branch_lookup(out_ptr : GitReference**, repo : GitRepository*, branch_name : LibC::Char*, branch_type : GitBranchT) : Int
+    fun git_branch_move(out_ptr : GitReference**, branch : GitReference*, new_branch_name : LibC::Char*, force : Int) : Int
+    fun git_branch_name(out_ptr : LibC::Char**, ref : GitReference*) : Int
+    fun git_branch_next(out_ptr : GitReference**, out_type : GitBranchT*, iter : GitBranchIterator*) : Int
+    fun git_branch_remote_name(out_ptr : GitBuf*, repo : GitRepository*, refname : LibC::Char*) : Int
+    fun git_branch_set_upstream(branch : GitReference*, branch_name : LibC::Char*) : Int
+    fun git_branch_upstream(out_ptr : GitReference**, branch : GitReference*) : Int
+    fun git_branch_upstream_name(out_ptr : GitBuf*, repo : GitRepository*, refname : LibC::Char*) : Int
+    fun git_branch_upstream_remote(buf : GitBuf*, repo : GitRepository*, refname : LibC::Char*) : Int
+
+    fun git_buf_contains_nul(buf : GitBuf*) : Int
+    fun git_buf_dispose(buffer : GitBuf*) : Void
+    fun git_buf_free(buffer : GitBuf*) : Void
+    fun git_buf_grow(buffer : GitBuf*, target_size : LibC::SizeT) : Int
+    fun git_buf_is_binary(buf : GitBuf*) : Int
+    fun git_buf_set(buffer : GitBuf*, data : Void*, datalen : LibC::SizeT) : Int
+
+    fun git_checkout_head(repo : GitRepository*, opts : GitCheckoutOptions*) : Int
+    fun git_checkout_index(repo : GitRepository*, index : GitIndex*, opts : GitCheckoutOptions*) : Int
+    fun git_checkout_options_init(opts : GitCheckoutOptions*, version : UInt) : Int
+    fun git_checkout_tree(repo : GitRepository*, treeish : GitObject*, opts : GitCheckoutOptions*) : Int
+
+    fun git_cherrypick(repo : GitRepository*, commit : GitCommit*, cherrypick_options : GitCherrypickOptions*) : Int
+    fun git_cherrypick_commit(out_ptr : GitIndex**, repo : GitRepository*, cherrypick_commit : GitCommit*, our_commit : GitCommit*, mainline : UInt, merge_options : GitMergeOptions*) : Int
+    fun git_cherrypick_options_init(opts : GitCherrypickOptions*, version : UInt) : Int
+
+    fun git_clone(out_ptr : GitRepository**, url : LibC::Char*, local_path : LibC::Char*, options : GitCloneOptions*) : Int
+    fun git_clone_options_init(opts : GitCloneOptions*, version : UInt) : Int
+
+    fun git_commit_amend(id : GitOid*, commit_to_amend : GitCommit*, update_ref : LibC::Char*, author : GitSignature*, committer : GitSignature*, message_encoding : LibC::Char*, message : LibC::Char*, tree : GitTree*) : Int
+    fun git_commit_author(commit : GitCommit*) : GitSignature*
+    fun git_commit_author_with_mailmap(out_ptr : GitSignature**, commit : GitCommit*, mailmap : GitMailmap*) : Int
+    fun git_commit_body(commit : GitCommit*) : LibC::Char*
+    fun git_commit_committer(commit : GitCommit*) : GitSignature*
+    fun git_commit_committer_with_mailmap(out_ptr : GitSignature**, commit : GitCommit*, mailmap : GitMailmap*) : Int
+    fun git_commit_create(id : GitOid*, repo : GitRepository*, update_ref : LibC::Char*, author : GitSignature*, committer : GitSignature*, message_encoding : LibC::Char*, message : LibC::Char*, tree : GitTree*, parent_count : LibC::SizeT, parents : GitCommit**) : Int
+    fun git_commit_create_buffer(out_ptr : GitBuf*, repo : GitRepository*, author : GitSignature*, committer : GitSignature*, message_encoding : LibC::Char*, message : LibC::Char*, tree : GitTree*, parent_count : LibC::SizeT, parents : GitCommit**) : Int
+    fun git_commit_create_v(id : GitOid*, repo : GitRepository*, update_ref : LibC::Char*, author : GitSignature*, committer : GitSignature*, message_encoding : LibC::Char*, message : LibC::Char*, tree : GitTree*, parent_count : LibC::SizeT) : Int
+    fun git_commit_create_with_signature(out_ptr : GitOid*, repo : GitRepository*, commit_content : LibC::Char*, signature : LibC::Char*, signature_field : LibC::Char*) : Int
+    fun git_commit_dup(out_ptr : GitCommit**, source : GitCommit*) : Int
+    fun git_commit_extract_signature(signature : GitBuf*, signed_data : GitBuf*, repo : GitRepository*, commit_id : GitOid*, field : LibC::Char*) : Int
+    fun git_commit_free(commit : GitCommit*) : Void
+    fun git_commit_header_field(out_ptr : GitBuf*, commit : GitCommit*, field : LibC::Char*) : Int
+    fun git_commit_id(commit : GitCommit*) : GitOid*
+    fun git_commit_lookup(commit : GitCommit**, repo : GitRepository*, id : GitOid*) : Int
+    fun git_commit_lookup_prefix(commit : GitCommit**, repo : GitRepository*, id : GitOid*, len : LibC::SizeT) : Int
+    fun git_commit_message(commit : GitCommit*) : LibC::Char*
+    fun git_commit_message_encoding(commit : GitCommit*) : LibC::Char*
+    fun git_commit_message_raw(commit : GitCommit*) : LibC::Char*
+    fun git_commit_nth_gen_ancestor(ancestor : GitCommit**, commit : GitCommit*, n : UInt) : Int
+    fun git_commit_owner(commit : GitCommit*) : GitRepository*
+    fun git_commit_parent(out_ptr : GitCommit**, commit : GitCommit*, n : UInt) : Int
+    fun git_commit_parent_id(commit : GitCommit*, n : UInt) : GitOid*
+    fun git_commit_raw_header(commit : GitCommit*) : LibC::Char*
+    fun git_commit_summary(commit : GitCommit*) : LibC::Char*
+    fun git_commit_time(commit : GitCommit*) : GitTimeT
+    fun git_commit_time_offset(commit : GitCommit*) : Int
+    fun git_commit_tree(tree_out : GitTree**, commit : GitCommit*) : Int
+    fun git_commit_tree_id(commit : GitCommit*) : GitOid*
 
     fun git_libgit2_features : Int
     fun git_libgit2_init : Int
