@@ -71,6 +71,9 @@ module Git2
     alias GitObjectSizeT = UInt64T
     alias GitOffT = Int64T
     alias GitTimeT = Int64T
+    alias LIBSSH2_SESSION = Void
+    alias LIBSSH2_USERAUTH_KBDINT_PROMPT = Void
+    alias LIBSSH2_USERAUTH_KBDINT_RESPONSE = Void
 
     @[Flags]
     enum GitApplyFlagsT
@@ -190,13 +193,13 @@ module Git2
 
     @[Flags]
     enum GitCredentialT
-      GIT_CREDENTAIL_USERPASS_PLAINTEXT
-      GIT_CREDENTAIL_SSH_KEY
-      GIT_CREDENTAIL_SSH_CUSTOM
-      GIT_CREDENTAIL_DEFAULT
-      GIT_CREDENTAIL_SSH_INTERACTIVE
-      GIT_CREDENTAIL_USERNAME
-      GIT_CREDENTAIL_SSH_MEMORY
+      GIT_CREDENTIAL_USERPASS_PLAINTEXT
+      GIT_CREDENTIAL_SSH_KEY
+      GIT_CREDENTIAL_SSH_CUSTOM
+      GIT_CREDENTIAL_DEFAULT
+      GIT_CREDENTIAL_SSH_INTERACTIVE
+      GIT_CREDENTIAL_USERNAME
+      GIT_CREDENTIAL_SSH_MEMORY
     end
 
     enum GitDeltaT
@@ -969,6 +972,8 @@ module Git2
     alias GitCommitSigningCb = GitBuf*, GitBuf*, LibC::Char*, Void* -> Int
     alias GitConfigForeachCb = GitConfigEntry*, Void* -> Int
     alias GitCredentialAcquireCb = GitCredential**, LibC::Char*, LibC::Char*, UInt, Void* -> Int
+    alias GitCredentialSignCb = LIBSSH2_SESSION*, LibC::Char**, LibC::SizeT, LibC::Char*, LibC::SizeT, Void** -> Int
+    alias GitCredentialSshInteractiveCb = LibC::Char*, Int, LibC::Char*, Int, Int, LIBSSH2_USERAUTH_KBDINT_PROMPT*, LIBSSH2_USERAUTH_KBDINT_RESPONSE*, Void** -> Void
     alias GitHeadlistCb = GitRemoteHead*, Void* -> Int
     alias GitDiffNotifyCb = GitDiff*, GitDiffDelta*, LibC::Char*, Void* -> Int
     alias GitDiffProgressCb = GitDiff*, LibC::Char*, LibC::Char*, Void* -> Int
@@ -1396,6 +1401,12 @@ module Git2
       free : GitWritestream* -> Void
     end
 
+    struct GitDescribeOptions
+      version, max_candidates_tags, describe_strategy : UInt
+      pattern : LibC::Char*
+      only_follow_first_parent, show_commit_oid_as_fallback : Int
+    end
+
     fun git_annotated_commit_free(commit : GitAnnotatedCommit*) : Void
     fun git_annotated_commit_from_fetchhead(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, branch_name : LibC::Char*, remote_url : LibC::Char*, id : GitOid*) : Int
     fun git_annotated_commit_from_ref(out_ptr : GitAnnotatedCommit**, repo : GitRepository*, ref : GitReference*) : Int
@@ -1551,6 +1562,26 @@ module Git2
     fun git_config_set_multivar(cfg : GitConfig*, name : LibC::Char*, regexp : LibC::Char*, value : LibC::Char*) : Int
     fun git_config_set_string(cfg : GitConfig*, name : LibC::Char*, value : LibC::Char*) : Int
     fun git_config_snapshot(out_ptr : GitConfig**, config : GitConfig*) : Int
+
+    fun git_credential_default_new(out_ptr : GitCredential**) : Int
+    fun git_credential_free(cred : GitCredential*) : Void
+    fun git_credential_get_username(cred : GitCredential*) : LibC::Char*
+    fun git_credential_has_username(cred : GitCredential*) : Int
+    fun git_credential_ssh_custom_new(out_ptr : GitCredential**, username : LibC::Char*, publickey : LibC::Char*, publickey_len : LibC::SizeT, sign_callback : GitCredentialSignCb, payload : Void*) : Int
+    fun git_credential_ssh_interactive_new(out_ptr : GitCredential**, username : LibC::Char*, prompt_callback : GitCredentialSshInteractiveCb, payload : Void*) : Int
+    fun git_credential_ssh_key_from_agent(out_ptr : GitCredential**, username : LibC::Char*) : Int
+    fun git_credential_ssh_key_memory_new(out_ptr : GitCredential**, username : LibC::Char*, publickey : LibC::Char*, privatekey : LibC::Char*, passphrase : LibC::Char*) : Int
+    fun git_credential_ssh_key_new(out_ptr : GitCredential**, username : LibC::Char*, publickey : LibC::Char*, privatekey : LibC::Char*, passphrase : LibC::Char*) : Int
+    fun git_credential_username_new(out_ptr : GitCredential**, username : LibC::Char*) : Int
+    fun git_credential_userpass(out_ptr : GitCredential**, url : LibC::Char*, user_from_url : LibC::Char*, allowed_types : UInt, payload : Void*) : Int
+    fun git_credential_userpass_plaintext_new(out_ptr : GitCredential**, username : LibC::Char*, password : LibC::Char*) : Int
+
+    fun git_describe_commit(result : GitDescribeResult**, committish : GitObject*, opts : GitDescribeOptions*) : Int
+    fun git_describe_format(out_ptr : GitBuf*, result : GitDescribeResult*, opts : GitDescribeFormatOptions*) : Int
+    fun git_describe_format_options_init(opts : GitDescribeFormatOptions*, version : UInt) : Int
+    fun git_describe_options_init(opts : GitDescribeOptions*, version : UInt) : Int
+    fun git_describe_result_free(result : GitDescribeResult*) : Void
+    fun git_describe_workdir(out_ptr : GitDescribeResult**, repo : GitRepository*, opts : GitDescribeOptions*) : Int
 
     fun git_libgit2_features : Int
     fun git_libgit2_init : Int
