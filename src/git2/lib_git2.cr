@@ -1711,5 +1711,26 @@ module Git2
     fun git_mailmap_new(out_ptr : GitMailmap**) : Int
     fun git_mailmap_resolve(real_name : LibC::Char**, real_email : LibC::Char**, mm : GitMailmap*, name : LibC::Char*, email : LibC::Char*) : Int
     fun git_mailmap_resolve_signature(out_ptr : GitSignature**, mm : GitMailmap*, sig : GitSignature*) : Int
+
+    fun git_merge(repo : GitRepository*, their_heads : GitAnnotatedCommit**, their_heads_len : LibC::SizeT, merge_opts : GitMergeOptions*, checkout_opts : GitCheckoutOptions*) : Int
+    fun git_merge_analysis(analysis_out : GitMergeAnalysisT*, preference_out : GitMergePreferenceT*, repo : GitRepository*, their_heads : GitAnnotatedCommit**, their_heads_len : LibC::SizeT) : Int
+    fun git_merge_analysis_for_ref(analysis_out : GitMergeAnalysisT*, preference_out : GitMergePreferenceT*, repo : GitRepository*, our_ref : GitReference*, their_heads : GitAnnotatedCommit**, their_heads_len : LibC::SizeT) : Int
+    fun git_merge_base(out_ptr : GitOid*, repo : GitRepository*, one : GitOid*, two : GitOid*) : Int
+    fun git_merge_base_many(out_ptr : GitOid*, repo : GitRepository*, length : LibC::SizeT, input_array : GitOid**) : Int
+    fun git_merge_base_octopus(out_ptr : GitOid*, repo : GitRepository*, length : LibC::SizeT, input_array : GitOid**) : Int
+    fun git_merge_bases(out_ptr : GitOidarray*, repo : GitRepository*, one : GitOid*, two : GitOid*) : Int
+    fun git_merge_bases_many(out_ptr : GitOidarray*, repo : GitRepository*, length : LibC::SizeT, input_array : GitOid**) : Int
+    fun git_merge_commits(out_ptr : GitIndex**, repo : GitRepository*, our_commit : GitCommit*, their_commit : GitCommit*, opts : GitMergeOptions*) : Int
+    fun git_merge_file(out_ptr : GitMergeFileResult*, ancestor : GitMergeFileInput*, ours : GitMergeFileInput*, theirs : GitMergeFileInput*, opts : GitMergeFileOptions*) : Int
+    fun git_merge_file_from_index(out_ptr : GitMergeFileResult*, repo : GitRepository*, ancestor : GitIndexEntry*, ours : GitIndexEntry*, theirs : GitIndexEntry*, opts : GitMergeFileOptions*) : Int
+    fun git_merge_file_input_init(opts : GitMergeFileInput*, version : UInt) : Int
+    fun git_merge_file_options_init(opts : GitMergeFileOptions*, version : UInt) : Int
+    fun git_merge_file_result_free(result : GitMergeFileResult*) : Void
+    fun git_merge_options_init(opts : GitMergeOptions*, version : UInt) : Int
+    fun git_merge_trees(out_ptr : GitIndex**, repo : GitRepository*, ancestor_tree : GitTree*, our_tree : GitTree*, their_tree : GitTree*, opts : GitMergeOptions*) : Int
+
+    fun git_message_prettify(out_ptr : GitBuf*, message : LibC::Char*, strip_comments : Int, comment_char : LibC::Char) : Int
+    fun git_message_trailer_array_free(arr : GitMessageTrailerArray*) : Void
+    fun git_message_trailers(arr : GitMessageTrailerArray*, message : LibC::Char*) : Int
   end
 end
