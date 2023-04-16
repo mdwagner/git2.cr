@@ -13,6 +13,10 @@ module Git2
     alias SizeT = LibC::SizeT
     alias Float = LibC::Float
 
+    alias GitObjectSizeT = UInt64T
+    alias GitOffT = Int64T
+    alias GitTimeT = Int64T
+
     alias GitAnnotatedCommit = Void
     alias GitBlame = Void
     alias GitBlob = Void
@@ -71,9 +75,6 @@ module Git2
     alias GitTreeEntry = Void
     alias GitTreebuilder = Void
     alias GitWorktree = Void
-    alias GitObjectSizeT = UInt64T
-    alias GitOffT = Int64T
-    alias GitTimeT = Int64T
     alias LIBSSH2_SESSION = Void
     alias LIBSSH2_USERAUTH_KBDINT_PROMPT = Void
     alias LIBSSH2_USERAUTH_KBDINT_RESPONSE = Void
