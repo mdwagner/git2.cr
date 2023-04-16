@@ -1583,10 +1583,133 @@ module Git2
     fun git_describe_result_free(result : GitDescribeResult*) : Void
     fun git_describe_workdir(out_ptr : GitDescribeResult**, repo : GitRepository*, opts : GitDescribeOptions*) : Int
 
+    fun git_diff_blob_to_buffer(old_blob : GitBlob*, old_as_path : LibC::Char*, buffer : LibC::Char*, buffer_len : LibC::SizeT, buffer_as_path : LibC::Char*, options : GitDiffOptions*, file_cb : GitDiffFileCb, binary_cb : GitDiffBinaryCb, hunk_cb : GitDiffHunkCb, line_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_diff_blobs(old_blob : GitBlob*, old_as_path : LibC::Char*, new_blob : GitBlob*, new_as_path : LibC::Char*, options : GitDiffOptions*, file_cb : GitDiffFileCb, binary_cb : GitDiffBinaryCb, hunk_cb : GitDiffHunkCb, line_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_diff_buffers(old_buffer : Void*, old_len : LibC::SizeT, old_as_path : LibC::Char*, new_buffer : Void*, new_len : LibC::SizeT, new_as_path : LibC::Char*, options : GitDiffOptions*, file_cb : GitDiffFileCb, binary_cb : GitDiffBinaryCb, hunk_cb : GitDiffHunkCb, line_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_diff_commit_as_email(out_ptr : GitBuf*, repo : GitRepository*, commit : GitCommit*, patch_no : LibC::SizeT, total_patches : LibC::SizeT, flags : UInt32T, diff_opts : GitDiffOptions*) : Int
+    fun git_diff_find_options_init(opts : GitDiffFindOptions*, version : UInt) : Int
+    fun git_diff_find_similar(diff : GitDiff*, options : GitDiffFindOptions*) : Int
+    fun git_diff_find_foreach(diff : GitDiff*, file_cb : GitDiffFileCb, binary_cb : GitDiffBinaryCb, hunk_cb : GitDiffHunkCb, line_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_diff_format_email(out_ptr : GitBuf*, diff : GitDiff*, opts : GitDiffFormatEmailOptions*) : Int
+    fun git_diff_format_email_options_init(opts : GitDiffFormatEmailOptions*, version : UInt) : Int
+    fun git_diff_free(diff : GitDiff*) : Void
+    fun git_diff_from_buffer(out_ptr : GitDiff**, content : LibC::Char*, content_len : LibC::SizeT) : Int
+    fun git_diff_get_delta(diff : GitDiff*, idx : LibC::SizeT) : GitDiffDelta*
+    fun git_diff_get_stats(out_ptr : GitDiffStats**, diff : GitDiff*) : Int
+    fun git_diff_index_to_index(diff : GitDiff**, repo : GitRepository*, old_index : GitIndex*, new_index : GitIndex*, opts : GitDiffOptions*) : Int
+    fun git_diff_index_to_workdir(diff : GitDiff**, repo : GitRepository*, index : GitIndex*, opts : GitDiffOptions*) : Int
+    fun git_diff_is_sorted_icase(diff : GitDiff*) : Int
+    fun git_diff_merge(onto : GitDiff*, from : GitDiff*) : Int
+    fun git_diff_num_deltas(diff : GitDiff*) : LibC::SizeT
+    fun git_diff_num_deltas_of_type(diff : GitDiff*, type : GitDeltaT) : LibC::SizeT
+    fun git_diff_options_init(opts : GitDiffOptions*, version : UInt) : Int
+    fun git_diff_patchid(out_ptr : GitOid*, diff : GitDiff*, opts : GitDiffPatchidOptions*) : Int
+    fun git_diff_patchid_options_init(opts : GitDiffPatchidOptions*, version : UInt) : Int
+    fun git_diff_print(diff : GitDiff*, format : GitDiffFormatT, print_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_diff_stats_deletions(stats : GitDiffStats*) : LibC::SizeT
+    fun git_diff_stats_files_changed(stats : GitDiffStats*) : LibC::SizeT
+    fun git_diff_stats_free(stats : GitDiffStats*) : Void
+    fun git_diff_stats_insertions(stats : GitDiffStats*) : LibC::SizeT
+    fun git_diff_stats_to_buf(out_ptr : GitBuf*, stats : GitDiffStats*, format : GitDiffStatsFormatT, width : LibC::SizeT) : Int
+    fun git_diff_status_char(status : GitDeltaT) : LibC::Char
+    fun git_diff_to_buf(out_ptr : GitBuf*, diff : GitDiff*, format : GitDiffFormatT) : Int
+    fun git_diff_tree_to_index(diff : GitDiff**, repo : GitRepository*, old_tree : GitTree*, index : GitIndex*, opts : GitDiffOptions*) : Int
+    fun git_diff_tree_to_tree(diff : GitDiff**, repo : GitRepository*, old_tree : GitTree*, new_tree : GitTree*, opts : GitDiffOptions*) : Int
+    fun git_diff_tree_to_workdir(diff : GitDiff**, repo : GitRepository*, old_tree : GitTree*, opts : GitDiffOptions*) : Int
+    fun git_diff_tree_to_workdir_with_index(diff : GitDiff**, repo : GitRepository*, old_tree : GitTree*, opts : GitDiffOptions*) : Int
+
+    fun git_error_clear : Void
+    fun git_error_last : GitError*
+    fun git_error_set_oom : Void
+    fun git_error_set_str(error_class : Int, string : LibC::Char*) : Int
+
+    fun git_fetch_options_init(opts : GitFetchOptions*, version : UInt) : Int
+
+    fun git_filter_list_apply_to_blob(out_ptr : GitBuf*, filters : GitFilterList*, blob : GitBlob*) : Int
+    fun git_filter_list_apply_to_data(out_ptr : GitBuf*, filters : GitFilterList*, in : GitBuf*) : Int
+    fun git_filter_list_apply_to_file(out_ptr : GitBuf*, filters : GitFilterList*, repo : GitRepository*, path : LibC::Char*) : Int
+    fun git_filter_list_contains(filters : GitFilterList*, name : LibC::Char*) : Int
+    fun git_filter_list_free(filters : GitFilterList*) : Void
+    fun git_filter_list_load(filters : GitFilterList**, repo : GitRepository*, blob : GitBlob*, path : LibC::Char*, mode : GitFilterModeT, flags : UInt32T) : Int
+    fun git_filter_list_stream_blob(filters : GitFilterList**, blob : GitBlob*, target : GitWritestream*) : Int
+    fun git_filter_list_stream_data(filters : GitFilterList**, data : GitBuf*, target : GitWritestream*) : Int
+    fun git_filter_list_stream_file(filters : GitFilterList**, repo : GitRepository*, path : LibC::Char*, target : GitWritestream*) : Int
+
+    fun giterr_clear : Void
+    fun giterr_last : GitError*
+    fun giterr_set_oom : Void
+    fun giterr_set_str(error_class : Int, string : LibC::Char*) : Void
+
+    fun git_graph_ahead_behind(ahead : LibC::SizeT, behind : LibC::SizeT, repo : GitRepository*, local : GitOid*, upstream : GitOid*) : Int
+    fun git_graph_descendant_of(repo : GitRepository*, commit : GitOid*, ancestor : GitOid*) : Int
+
+    fun git_ignore_add_rule(repo : GitRepository*, rules : LibC::Char*) : Int
+    fun git_ignore_clear_internal_rules(repo : GitRepository*) : Int
+    fun git_ignore_path_is_ignored(ignored : Int*, repo : GitRepository*, path : LibC::Char*) : Int
+
+    fun git_index_add(index : GitIndex*, source_entry : GitIndexEntry*) : Int
+    fun git_index_add_all(index : GitIndex*, pathspec : GitStrarray*, flags : UInt, callback : GitIndexMatchedPathCb, payload : Void*) : Int
+    fun git_index_add_bypath(index : GitIndex*, path : LibC::Char*) : Int
+    fun git_index_add_from_buffer(index : GitIndex*, entry : GitIndexEntry*, buffer : Void*, len : LibC::SizeT) : Int
+    fun git_index_caps(index : GitIndex*) : Int
+    fun git_index_checksum(index : GitIndex*) : GitOid*
+    fun git_index_clear(index : GitIndex*) : Int
+    fun git_index_conflict_add(index : GitIndex*, ancestor_entry : GitIndexEntry*, our_entry : GitIndexEntry*, their_entry : GitIndexEntry*) : Int
+    fun git_index_conflict_cleanup(index : GitIndex*) : Int
+    fun git_index_conflict_get(ancestor_out : GitIndexEntry**, our_out : GitIndexEntry**, their_out : GitIndexEntry**, index : GitIndex*, path : LibC::Char*) : Int
+    fun git_index_conflict_iterator_free(iterator : GitIndexConflictIterator*) : Void
+    fun git_index_conflict_iterator_new(iterator_out : GitIndexConflictIterator**, index : GitIndex*) : Int
+    fun git_index_conflict_next(ancestor_out : GitIndexEntry**, our_out : GitIndexEntry**, their_out : GitIndexEntry**, iterator : GitIndexConflictIterator*) : Int
+    fun git_index_conflict_remove(index : GitIndex*, path : LibC::Char*) : Int
+    fun git_index_entry_is_conflict(entry : GitIndexEntry*) : Int
+    fun git_index_entry_stage(entry : GitIndexEntry*) : Int
+    fun git_index_entrycount(index : GitIndex*) : LibC::SizeT
+    fun git_index_find(at_pos : LibC::SizeT, index : GitIndex*, path : LibC::Char*) : Int
+    fun git_index_find_prefix(at_pos : LibC::SizeT, index : GitIndex*, prefix : LibC::Char*) : Int
+    fun git_index_free(index : GitIndex*) : Void
+    fun git_index_get_byindex(index : GitIndex*, n : LibC::SizeT) : GitIndexEntry*
+    fun git_index_get_bypath(index : GitIndex*, path : LibC::Char*, stage : Int) : GitIndexEntry*
+    fun git_index_has_conflicts(index : GitIndex*) : Int
+    fun git_index_iterator_free(iterator : GitIndexIterator*) : Void
+    fun git_index_iterator_new(iterator_out : GitIndexIterator**, index : GitIndex*) : Int
+    fun git_index_iterator_next(out_ptr : GitIndexEntry**, iterator : GitIndexIterator*) : Int
+    fun git_index_new(out_ptr : GitIndex**) : Int
+    fun git_index_open(out_ptr : GitIndex**, index_path : LibC::Char*) : Int
+    fun git_index_owner(index : GitIndex*) : GitRepository*
+    fun git_index_path(index : GitIndex*) : LibC::Char*
+    fun git_index_read(index : GitIndex*, force : Int) : Int
+    fun git_index_read_tree(index : GitIndex*, tree : GitTree*) : Int
+    fun git_index_remove(index : GitIndex*, path : LibC::Char*, stage : Int) : Int
+    fun git_index_remove_all(index : GitIndex*, pathspec : GitStrarray*, callback : GitIndexMatchedPathCb, payload : Void*) : Int
+    fun git_index_remove_bypath(index : GitIndex*, path : LibC::Char*) : Int
+    fun git_index_remove_directory(index : GitIndex*, dir : LibC::Char*, stage : Int) : Int
+    fun git_index_set_caps(index : GitIndex*, caps : Int) : Int
+    fun git_index_set_version(index : GitIndex*, version : UInt) : Int
+    fun git_index_update_all(index : GitIndex*, pathspec : GitStrarray*, callback : GitIndexMatchedPathCb, payload : Void*) : Int
+    fun git_index_version(index : GitIndex*) : UInt
+    fun git_index_write(index : GitIndex*) : Int
+    fun git_index_write_tree(out_ptr : GitOid*, index : GitIndex*) : Int
+    fun git_index_write_tree_to(out_ptr : GitOid*, index : GitIndex*, repo : GitRepository*) : Int
+
+    fun git_indexer_append(idx : GitIndexer*, data : Void*, size : LibC::SizeT, stats : GitIndexerProgress*) : Int
+    fun git_indexer_commit(idx : GitIndexer*, stats : GitIndexerProgress*) : Int
+    fun git_indexer_free(idx : GitIndexer*) : Void
+    fun git_indexer_hash(idx : GitIndexer*) : GitOid*
+    fun git_indexer_new(out_ptr : GitIndexer**, path : LibC::Char*, mode : UInt, odb : GitOdb*, opts : GitIndexerOptions*) : Int
+    fun git_indexer_options_init(opts : GitIndexerOptions*, version : UInt) : Int
+
     fun git_libgit2_features : Int
     fun git_libgit2_init : Int
     fun git_libgit2_opts(option : Int) : Int
     fun git_libgit2_shutdown : Int
     fun git_libgit2_version(major : Int*, minor : Int*, rev : Int*) : Int
+
+    fun git_mailmap_add_entry(mm : GitMailmap*, real_name : LibC::Char*, real_email : LibC::Char*, replace_name : LibC::Char*, replace_email : LibC::Char*) : Int
+    fun git_mailmap_free(mm : GitMailmap*) : Void
+    fun git_mailmap_from_buffer(out_ptr : GitMailmap*, buf : LibC::Char*, len : LibC::SizeT) : Int
+    fun git_mailmap_from_repository(out_ptr : GitMailmap*, repo : GitRepository*) : Int
+    fun git_mailmap_new(out_ptr : GitMailmap**) : Int
+    fun git_mailmap_resolve(real_name : LibC::Char**, real_email : LibC::Char**, mm : GitMailmap*, name : LibC::Char*, email : LibC::Char*) : Int
+    fun git_mailmap_resolve_signature(out_ptr : GitSignature**, mm : GitMailmap*, sig : GitSignature*) : Int
   end
 end
