@@ -1769,5 +1769,41 @@ module Git2
     fun git_object_type(obj : GitObject*) : GitObjectT
     fun git_object_type2string(type : GitObjectT) : Char*
     fun git_object_typeisloose(type : GitObjectT) : Int
+
+    fun git_odb_add_alternate(odb : GitOdb*, backend : GitOdbBackend*, priority : Int) : Int
+    fun git_odb_add_backend(odb : GitOdb*, backend : GitOdbBackend*, priority : Int) : Int
+    fun git_odb_add_disk_alternate(odb : GitOdb*, path : Char*) : Int
+    fun git_odb_backend_loose(_out : GitOdbBackend**, objects_dir : Char*, compression_level : Int, do_fsync : Int, dir_mode : UInt, file_mode : UInt) : Int
+    fun git_odb_backend_one_pack(_out : GitOdbBackend**, index_file : Char*) : Int
+    fun git_odb_backend_pack(_out : GitOdbBackend**, objects_dir : Char*) : Int
+    fun git_odb_exists(db : GitOdb*, id : GitOid*) : Int
+    fun git_odb_exists_prefix(_out : GitOid*, db : GitOdb*, short_id : GitOid*, len : SizeT) : Int
+    fun git_odb_expand_ids(db : GitOdb*, ids : GitOdbExpandId*, count : SizeT) : Int
+    fun git_odb_foreach(db : GitOdb*, cb : GitOdbForeachCb, payload : Void*) : Int
+    fun git_odb_free(db : GitOdb*) : Void
+    fun git_odb_get_backend(_out : GitOdbBackend**, odb : GitOdb*, pos : SizeT) : Int
+    fun git_odb_hash(_out : GitOid*, data : Void*, len : SizeT, type : GitObjectT) : Int
+    fun git_odb_hashfile(_out : GitOid*, path : Char*, type : GitObjectT) : Int
+    fun git_odb_new(_out : GitOdb**) : Int
+    fun git_odb_num_backends(odb : GitOdb*) : SizeT
+    fun git_odb_object_data(object : GitOdbObject*) : Void*
+    fun git_odb_object_dup(dest : GitOdbObject**, source : GitOdbObject*) : Int
+    fun git_odb_object_free(object : GitOdbObject*) : Void
+    fun git_odb_object_id(object : GitOdbObject*) : GitOid*
+    fun git_odb_object_size(object : GitOdbObject*) : SizeT
+    fun git_odb_object_type(object : GitOdbObject*) : GitObjectT
+    fun git_odb_open(_out : GitOdb**, objects_dir : Char*) : Int
+    fun git_odb_open_rstream(_out : GitOdbStream**, len : SizeT*, type : GitObjectT*, db : GitOdb*, oid : GitOid*) : Int
+    fun git_odb_open_wstream(_out : GitOdbStream**, db : GitOdb*, size : GitObjectSizeT, type : GitObjectT) : Int
+    fun git_odb_read(_out : GitOdbObject**, db : GitOdb*, id : GitOid*) : Int
+    fun git_odb_read_header(len_out : SizeT*, type_out : GitObjectT*, db : GitOdb*, id : GitOid*) : Int
+    fun git_odb_read_prefix(_out : GitOdbObject**, db : GitOdb*, short_id : GitOid*, len : SizeT) : Int
+    fun git_odb_refresh(db : GitOdb*) : Int
+    fun git_odb_stream_finalize_write(_out : GitOid*, stream : GitOdbStream*) : Int
+    fun git_odb_stream_free(stream : GitOdbStream*) : Void
+    fun git_odb_stream_read(stream : GitOdbStream*, buffer : Char*, len : SizeT) : Int
+    fun git_odb_stream_write(stream : GitOdbStream*, buffer : Char*, len : SizeT) : Int
+    fun git_odb_write(_out : GitOid*, odb : GitOdb*, data : Void*, len : SizeT, type : GitObjectT) : Int
+    fun git_odb_write_pack(_out : GitOdbWritepack**, db : GitOdb*, progress_cb : GitIndexerProgressCb, progress_payload : Void*) : Int
   end
 end
