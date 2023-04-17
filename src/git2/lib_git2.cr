@@ -1805,5 +1805,28 @@ module Git2
     fun git_odb_stream_write(stream : GitOdbStream*, buffer : Char*, len : SizeT) : Int
     fun git_odb_write(_out : GitOid*, odb : GitOdb*, data : Void*, len : SizeT, type : GitObjectT) : Int
     fun git_odb_write_pack(_out : GitOdbWritepack**, db : GitOdb*, progress_cb : GitIndexerProgressCb, progress_payload : Void*) : Int
+
+    fun git_oid_cmp(a : GitOid*, b : GitOid*) : Int
+    fun git_oid_cpy(_out : GitOid*, src : GitOid*) : Int
+    fun git_oid_equal(a : GitOid*, b : GitOid*) : Int
+    fun git_oid_fmt(_out : Char*, id : GitOid*) : Int
+    fun git_oid_fromraw(_out : GitOid*, raw : Char*) : Int
+    fun git_oid_fromstr(_out : GitOid*, str : Char*) : Int
+    fun git_oid_fromstrn(_out : GitOid*, str : Char*, length : SizeT) : Int
+    fun git_oid_fromstrp(_out : GitOid*, str : Char*) : Int
+    fun git_oid_is_zero(id : GitOid*) : Int
+    fun git_oid_iszero(id : GitOid*) : Int
+    fun git_oid_ncmp(a : GitOid*, b : GitOid*, len : SizeT) : Int
+    fun git_oid_nfmt(_out : Char*, n : SizeT, id : GitOid*) : Int
+    fun git_oid_pathfmt(_out : Char*, id : GitOid*) : Int
+    fun git_oid_shorten_add(os : GitOidShorten*, text_id : Char*) : Int
+    fun git_oid_shorten_free(os : GitOidShorten*) : Void
+    fun git_oid_shorten_new(min_length : SizeT) : GitOidShorten*
+    fun git_oid_strcmp(id : GitOid*, str : Char*) : Int
+    fun git_oid_streq(id : GitOid*, str : Char*) : Int
+    fun git_oid_tostr(_out : Char*, n : SizeT, id : GitOid*) : Char*
+    fun git_oid_tostr_s(oid : GitOid*) : Char*
+
+    fun git_oidarray_free(array : GitOidarray*) : Void
   end
 end
