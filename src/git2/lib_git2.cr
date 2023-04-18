@@ -1828,5 +1828,21 @@ module Git2
     fun git_oid_tostr_s(oid : GitOid*) : Char*
 
     fun git_oidarray_free(array : GitOidarray*) : Void
+
+    fun git_packbuilder_foreach(pb : GitPackbuilder*, cb : GitPackbuilderForeachCb, payload : Void*) : Int
+    fun git_packbuilder_free(pb : GitPackbuilder*) : Void
+    fun git_packbuilder_hash(pb : GitPackbuilder*) : GitOid*
+    fun git_packbuilder_insert(pb : GitPackbuilder*, id : GitOid*, name : Char*) : Int
+    fun git_packbuilder_insert_commit(pb : GitPackbuilder*, id : GitOid*) : Int
+    fun git_packbuilder_insert_recur(pb : GitPackbuilder*, id : GitOid*, name : Char*) : Int
+    fun git_packbuilder_insert_tree(pb : GitPackbuilder*, id : GitOid*) : Int
+    fun git_packbuilder_insert_walk(pb : GitPackbuilder*, walk : GitRevwalk*) : Int
+    fun git_packbuilder_new(_out : GitPackbuilder**, repo : GitRepository*) : Int
+    fun git_packbuilder_object_count(pb : GitPackbuilder*) : SizeT
+    fun git_packbuilder_set_callbacks(pb : GitPackbuilder*, progress_cb : GitPackbuilderProgress, progress_cb_payload : Void*) : Int
+    fun git_packbuilder_set_threads(pb : GitPackbuilder*, n : UInt) : UInt
+    fun git_packbuilder_write(pb : GitPackbuilder*, path : Char*, mode : UInt, progress_cb : GitIndexerProgressCb, progress_cb_payload : Void*) : Int
+    fun git_packbuilder_write_buf(buf : GitBuf*, pb : GitPackbuilder*) : Int
+    fun git_packbuilder_written(pb : GitPackbuilder*) : SizeT
   end
 end
