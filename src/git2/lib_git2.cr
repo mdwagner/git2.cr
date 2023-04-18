@@ -1844,5 +1844,20 @@ module Git2
     fun git_packbuilder_write(pb : GitPackbuilder*, path : Char*, mode : UInt, progress_cb : GitIndexerProgressCb, progress_cb_payload : Void*) : Int
     fun git_packbuilder_write_buf(buf : GitBuf*, pb : GitPackbuilder*) : Int
     fun git_packbuilder_written(pb : GitPackbuilder*) : SizeT
+
+    fun git_patch_free(patch : GitPatch*) : Void
+    fun git_patch_from_blob_and_buffer(_out : GitPatch**, old_blob : GitBlob*, old_as_path : Char*, buffer : Void*, buffer_len : SizeT, buffer_as_path : Char*, opts : GitDiffOptions*) : Int
+    fun git_patch_from_blobs(_out : GitPatch**, old_blob : GitBlob*, old_as_path : Char*, new_blob : GitBlob*, new_as_path : Char*, opts : GitDiffOptions*) : Int
+    fun git_patch_from_buffers(_out : GitPatch**, old_buffer : Void*, old_len : SizeT, old_as_path : Char*, new_buffer : Void*, new_len : SizeT, new_as_path : Char*, opts : GitDiffOptions*) : Int
+    fun git_patch_from_diff(_out : GitPatch**, diff : GitDiff*, idx : SizeT) : Int
+    fun git_patch_get_delta(patch : GitPatch*) : GitDiffDelta*
+    fun git_patch_get_hunk(_out : GitDiffHunk**, lines_in_hunk : SizeT*, patch : GitPatch*, hunk_idx : SizeT) : Int
+    fun git_patch_get_lines_in_hunk(_out : GitDiffLine**, patch : GitPatch*, hunk_idx : SizeT, line_of_hunk : SizeT) : Int
+    fun git_patch_line_stats(total_context : SizeT*, total_additions : SizeT*, total_deletions : SizeT*, patch : GitPatch*) : Int
+    fun git_patch_num_hunks(patch : GitPatch*) : SizeT
+    fun git_patch_num_lines_in_hunk(patch : GitPatch*, hunk_idx : SizeT) : Int
+    fun git_patch_print(patch : GitPatch*, print_cb : GitDiffLineCb, payload : Void*) : Int
+    fun git_patch_size(patch : GitPatch*, include_context : Int, include_hunk_headers : Int, include_file_headers : Int) : SizeT
+    fun git_patch_to_buf(_out : GitBuf*, patch : GitPatch*) : Int
   end
 end
