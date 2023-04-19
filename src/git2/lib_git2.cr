@@ -1941,5 +1941,31 @@ module Git2
     fun git_reference_target(ref : GitReference*) : GitOid*
     fun git_reference_target_peel(ref : GitReference*) : GitOid*
     fun git_reference_type(ref : GitReference*) : GitReferenceT
+
+    fun git_reflog_append(reflog : GitReflog*, id : GitOid*, committer : GitSignature*, msg : Char*) : Int
+    fun git_reflog_delete(repo : GitRepository*, name : Char*) : Int
+    fun git_reflog_drop(reflog : GitReflog*, idx : SizeT, rewrite_previous_entry : Int) : Int
+    fun git_reflog_entry_byindex(reflog : GitReflog*, idx : SizeT) : GitReflogEntry*
+    fun git_reflog_entry_committer(entry : GitReflogEntry*) : GitSignature*
+    fun git_reflog_entry_id_new(entry : GitReflogEntry*) : GitOid*
+    fun git_reflog_entry_id_old(entry : GitReflogEntry*) : GitOid*
+    fun git_reflog_entry_message(entry : GitReflogEntry*) : Char*
+    fun git_reflog_entrycount(reflog : GitReflog*) : SizeT
+    fun git_reflog_free(reflog : GitReflog*) : Void
+    fun git_reflog_read(_out : GitReflog**, repo : GitRepository*, name : Char*) : Int
+    fun git_reflog_rename(repo : GitRepository*, old_name : Char*, name : Char*) : Int
+    fun git_reflog_write(reflog : GitReflog*) : Void
+
+    fun git_refspec_direction(spec : GitRefspec*) : GitDirection
+    fun git_refspec_dst(refspec : GitRefspec*) : Char*
+    fun git_refspec_dst_matches(refspec : GitRefspec*, refname : Char*) : Int
+    fun git_refspec_force(refspec : GitRefspec*) : Int
+    fun git_refspec_free(refspec : GitRefspec*) : Void
+    fun git_refspec_parse(refspec : GitRefspec**, input : Char*, is_fetch : Int) : Int
+    fun git_refspec_rtransform(_out : GitBuf*, spec : GitRefspec*, name : Char*) : Int
+    fun git_refspec_src(refspec : GitRefspec*) : Char*
+    fun git_refspec_src_matches(refspec : GitRefspec*, refname : Char*) : Int
+    fun git_refspec_string(refspec : GitRefspec*) : Char*
+    fun git_refspec_transform(_out : GitBuf*, spec : GitRefspec*, name : Char*) : Int
   end
 end
