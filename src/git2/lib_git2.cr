@@ -1859,5 +1859,45 @@ module Git2
     fun git_patch_print(patch : GitPatch*, print_cb : GitDiffLineCb, payload : Void*) : Int
     fun git_patch_size(patch : GitPatch*, include_context : Int, include_hunk_headers : Int, include_file_headers : Int) : SizeT
     fun git_patch_to_buf(_out : GitBuf*, patch : GitPatch*) : Int
+
+    fun git_pathspec_free(ps : GitPathspec*) : Void
+    fun git_pathspec_match_diff(_out : GitPathspecMatchList**, diff : GitDiff*, flags : UInt32T, ps : GitPathspec*) : Int
+    fun git_pathspec_match_index(_out : GitPathspecMatchList**, index : GitIndex*, flags : UInt32T, ps : GitPathspec*) : Int
+    fun git_pathspec_match_list_diff_entry(m : GitPathspecMatchList*, pos : SizeT) : GitDiffDelta*
+    fun git_pathspec_match_list_entry(m : GitPathspecMatchList*, pos : SizeT) : Char*
+    fun git_pathspec_match_list_entrycount(m : GitPathspecMatchList*) : SizeT
+    fun git_pathspec_match_list_failed_entry(m : GitPathspecMatchList*, pos : SizeT) : Char*
+    fun git_pathspec_match_list_failed_entrycount(m : GitPathspecMatchList*) : SizeT
+    fun git_pathspec_match_list_free(m : GitPathspecMatchList*) : Void
+    fun git_pathspec_match_tree(_out : GitPathspecMatchList**, tree : GitTree*, flags : UInt32T, ps : GitPathspec*) : Int
+    fun git_pathspec_match_workdir(_out : GitPathspecMatchList**, repo : GitRepository*, flags : UInt32T, ps : GitPathspec*) : Int
+    fun git_pathspec_matches_path(ps : GitPathspec*, flags : UInt32T, path : Char*) : Int
+    fun git_pathspec_new(_out : GitPathspec**, pathspec : GitStrarray*) : Int
+
+    fun git_proxy_options_init(opts : GitProxyOptions*, version : UInt) : Int
+
+    fun git_push_options_init(opts : GitPushOptions*, version : UInt) : Int
+
+    fun git_rebase_abort(rebase : GitRebase*) : Int
+    fun git_rebase_commit(id : GitOid*, rebase : GitRebase*, author : GitSignature*, committer : GitSignature*, message_encoding : Char*, message : Char*) : Int
+    fun git_rebase_finish(rebase : GitRebase*, signature : GitSignature*) : Int
+    fun git_rebase_free(rebase : GitRebase*) : Void
+    fun git_rebase_init(_out : GitRebase**, repo : GitRepository*, branch : GitAnnotatedCommit*, upstream : GitAnnotatedCommit*, onto : GitAnnotatedCommit*, opts : GitRebaseOptions*) : Int
+    fun git_rebase_inmemory_index(index : GitIndex**, rebase : GitRebase*) : Int
+    fun git_rebase_next(operation : GitRebaseOperation**, rebase : GitRebase*) : Int
+    fun git_rebase_onto_id(rebase : GitRebase*) : GitOid*
+    fun git_rebase_onto_name(rebase : GitRebase*) : Char*
+    fun git_rebase_open(_out : GitRebase**, repo : GitRepository*, opts : GitRebaseOptions*) : Int
+    fun git_rebase_operation_byindex(rebase : GitRebase*, idx : SizeT) : GitRebaseOperation*
+    fun git_rebase_operation_current(rebase : GitRebase*) : SizeT
+    fun git_rebase_operation_entrycount(rebase : GitRebase*) : SizeT
+    fun git_rebase_options_init(opts : GitRebaseOptions*, version : UInt) : Int
+    fun git_rebase_orig_head_id(rebase : GitRebase*) : GitOid*
+    fun git_rebase_orig_head_name(rebase : GitRebase*) : Char*
+
+    fun git_refdb_compress(refdb : GitRefdb*) : Int
+    fun git_refdb_free(refdb : GitRefdb*) : Void
+    fun git_refdb_new(_out : GitRefdb**, repo : GitRepository*) : Int
+    fun git_refdb_open(_out : GitRefdb**, repo : GitRepository*) : Int
   end
 end
