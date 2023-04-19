@@ -1899,5 +1899,47 @@ module Git2
     fun git_refdb_free(refdb : GitRefdb*) : Void
     fun git_refdb_new(_out : GitRefdb**, repo : GitRepository*) : Int
     fun git_refdb_open(_out : GitRefdb**, repo : GitRepository*) : Int
+
+    fun git_reference_cmp(ref1 : GitReference*, ref2 : GitReference*) : Int
+    fun git_reference_create(_out : GitReference**, repo : GitRepository*, name : Char*, id : GitOid*, force : Int, log_message : Char*) : Int
+    fun git_reference_create_matching(_out : GitReference**, repo : GitRepository*, name : Char*, id : GitOid*, force : Int, current_id : GitOid*, log_message : Char*) : Int
+    fun git_reference_delete(ref : GitReference*) : Int
+    fun git_reference_dup(dest : GitReference**, source : GitReference*) : Int
+    fun git_reference_dwim(_out : GitReference**, repo : GitRepository*, shorthand : Char*) : Int
+    fun git_reference_ensure_log(repo : GitRepository*, refname : Char*) : Int
+    fun git_reference_foreach(repo : GitRepository*, callback : GitReferenceForeachCb, payload : Void*) : Int
+    fun git_reference_foreach_glob(repo : GitRepository*, glob : Char*, callback : GitReferenceForeachNameCb, payload : Void*) : Int
+    fun git_reference_foreach_name(repo : GitRepository*, callback : GitReferenceForeachNameCb, payload : Void*) : Int
+    fun git_reference_free(ref : GitReference*) : Void
+    fun git_reference_has_log(repo : GitRepository*, refname : Char*) : Int
+    fun git_reference_is_branch(ref : GitReference*) : Int
+    fun git_reference_is_note(ref : GitReference*) : Int
+    fun git_reference_is_remote(ref : GitReference*) : Int
+    fun git_reference_is_tag(ref : GitReference*) : Int
+    fun git_reference_is_valid_name(refname : Char*) : Int
+    fun git_reference_iterator_free(iter : GitReferenceIterator*) : Void
+    fun git_reference_iterator_glob_new(_out : GitReferenceIterator**, repo : GitRepository*, glob : Char*) : Int
+    fun git_reference_iterator_new(_out : GitReferenceIterator**, repo : GitRepository*) : Int
+    fun git_reference_list(array : GitStrarray*, repo : GitRepository*) : Int
+    fun git_reference_lookup(_out : GitReference**, repo : GitRepository*, name : Char*) : Int
+    fun git_reference_name(ref : GitReference*) : Char*
+    fun git_reference_name_to_id(_out : GitOid*, repo : GitRepository*, name : Char*) : Int
+    fun git_reference_next(_out : GitReference**, iter : GitReferenceIterator*) : Int
+    fun git_reference_next_name(_out : GitReference**, iter : GitReferenceIterator*) : Int
+    fun git_reference_normalize_name(buffer_out : Char*, buffer_size : SizeT, name : Char*, flags : UInt) : Int
+    fun git_reference_owner(ref : GitReference*) : GitRepository*
+    fun git_reference_peel(_out : GitObject**, ref : GitReference*, type : GitObjectT) : Int
+    fun git_reference_remove(repo : GitRepository*, name : Char*) : Int
+    fun git_reference_rename(new_ref : GitReference**, ref : GitReference*, new_name : Char*, force : Int, log_message : Char*) : Int
+    fun git_reference_resolve(_out : GitReference**, ref : GitReference*) : Int
+    fun git_reference_set_target(_out : GitReference**, ref : GitReference*, id : GitOid*, log_message : Char*) : Int
+    fun git_reference_shorthand(ref : GitReference*) : Char*
+    fun git_reference_symbolic_create(_out : GitReference**, repo : GitRepository*, name : Char*, target : Char*, force : Int, log_message : Char*) : Int
+    fun git_reference_symbolic_create_matching(_out : GitReference**, repo : GitRepository*, name : Char*, target : Char*, force : Int, current_value : Char*, log_message : Char*) : Int
+    fun git_reference_symbolic_set_target(_out : GitReference**, ref : GitReference*, target : Char*, log_message : Char*) : Int
+    fun git_reference_symbolic_target(ref : GitReference*) : Char*
+    fun git_reference_target(ref : GitReference*) : GitOid*
+    fun git_reference_target_peel(ref : GitReference*) : GitOid*
+    fun git_reference_type(ref : GitReference*) : GitReferenceT
   end
 end
