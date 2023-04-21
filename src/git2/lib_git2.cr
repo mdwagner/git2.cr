@@ -1361,7 +1361,7 @@ module Git2
       progress_payload : Void*
     end
 
-    struct GitStashEntry
+    struct GitStatusEntry
       status : GitStatusT
       head_to_index, index_to_workdir : GitDiffDelta*
     end
@@ -2085,5 +2085,33 @@ module Git2
     fun git_revwalk_reset(walker : GitRevwalk*) : Int
     fun git_revwalk_simplify_first_parent(walk : GitRevwalk*) : Int
     fun git_revwalk_sorting(walk : GitRevwalk*, sort_node : UInt) : Int
+
+    fun git_signature_default(_out : GitSignature**, repo : GitRepository*) : Int
+    fun git_signature_dup(dest : GitSignature**, sig : GitSignature*) : Int
+    fun git_signature_free(sig : GitSignature*) : Void
+    fun git_signature_from_buffer(_out : GitSignature**, buf : Char*) : Int
+    fun git_signature_new(_out : GitSignature**, name : Char*, email : Char*, time : GitTimeT, offset : Int) : Int
+    fun git_signature_now(_out : GitSignature**, name : Char*, email : Char*) : Int
+
+    fun git_stash_apply(repo : GitRepository*, index : SizeT, options : GitStashApplyOptions*) : Int
+    fun git_stash_apply_options_init(opts : GitStashApplyOptions*, version : UInt) : Int
+    fun git_stash_drop(repo : GitRepository*, index : SizeT) : Int
+    fun git_stash_foreach(repo : GitRepository*, callback : GitStashCb, payload : Void*) : Int
+    fun git_stash_pop(repo : GitRepository*, index : SizeT, options : GitStashApplyOptions*) : Int
+    fun git_stash_save(_out : GitOid*, repo : GitRepository*, stasher : GitSignature*, message : Char*, flags : UInt32T) : Int
+
+    fun git_status_byindex(statuslist : GitStatusList*, idx : SizeT) : GitStatusEntry*
+    fun git_status_file(status_flags : UInt*, repo : GitRepository*, path : Char*) : Int
+    fun git_status_foreach(repo : GitRepository*, callback : GitStatusCb, payload : Void*) : Int
+    fun git_status_foreach_ext(repo : GitRepository*, opts : GitStatusOptions*, callback : GitStatusCb, payload : Void*) : Int
+    fun git_status_list_entrycount(statuslist : GitStatusList*) : SizeT
+    fun git_status_list_free(statuslist : GitStatusList*) : Void
+    fun git_status_list_new(_out : GitStatusList**, repo : GitRepository*, opts : GitStatusOptions*) : Int
+    fun git_status_options_init(opts : GitStatusOptions*, version : UInt) : Int
+    fun git_status_should_ignore(ignored : Int*, repo : GitRepository*, path : Char*) : Int
+
+    fun git_strarray_copy(tgt : GitStrarray*, src : GitStrarray*) : Int
+    fun git_strarray_dispose(array : GitStrarray*) : Void
+    fun git_strarray_free(array : GitStrarray*) : Void
   end
 end
