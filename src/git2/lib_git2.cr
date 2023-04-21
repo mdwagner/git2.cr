@@ -1967,5 +1967,123 @@ module Git2
     fun git_refspec_src_matches(refspec : GitRefspec*, refname : Char*) : Int
     fun git_refspec_string(refspec : GitRefspec*) : Char*
     fun git_refspec_transform(_out : GitBuf*, spec : GitRefspec*, name : Char*) : Int
+
+    fun git_remote_add_fetch(repo : GitRepository*, remote : Char*, refspec : Char*) : Int
+    fun git_remote_add_push(repo : GitRepository*, remote : Char*, refspec : Char*) : Int
+    fun git_remote_autotag(remote : GitRemote*) : GitRemoteAutotagOptionT
+    fun git_remote_connect(remote : GitRemote*, direction : GitDirection, callbacks : GitRemoteCallbacks*, proxy_opts : GitProxyOptions*, custom_headers : GitStrarray*) : Int
+    fun git_remote_connected(remote : GitRemote*) : Int
+    fun git_remote_create(_out : GitRemote**, repo : GitRepository*, name : Char*, url : Char*) : Int
+    fun git_remote_create_anonymous(_out : GitRemote**, repo : GitRepository*, url : Char*) : Int
+    fun git_remote_create_detached(_out : GitRemote**, url : Char*) : Int
+    fun git_remote_create_options_init(opts : GitRemoteCreateOptions*, version : UInt) : Int
+    fun git_remote_create_with_fetchspec(_out : GitRemote**, repo : GitRepository*, name : Char*, url : Char*, fetch : Char*) : Int
+    fun git_remote_create_with_opts(_out : GitRemote**, url : Char*, opts : GitRemoteCreateOptions*) : Int
+    fun git_remote_default_branch(_out : GitBuf*, remote : GitRemote*) : Int
+    fun git_remote_delete(repo : GitRepository*, name : Char*) : Int
+    fun git_remote_disconnect(remote : GitRemote*) : Int
+    fun git_remote_download(remote : GitRemote*, refspecs : GitStrarray*, opts : GitFetchOptions*) : Int
+    fun git_remote_dup(dest : GitRemote**, source : GitRemote*) : Int
+    fun git_remote_fetch(remote : GitRemote*, refspecs : GitStrarray*, opts : GitFetchOptions*, reflog_message : Char*) : Int
+    fun git_remote_free(remote : GitRemote*) : Void
+    fun git_remote_get_fetch_refspecs(array : GitStrarray*, remote : GitRemote*) : Int
+    fun git_remote_get_push_refspecs(array : GitStrarray*, remote : GitRemote*) : Int
+    fun git_remote_get_refspec(remote : GitRemote*, n : SizeT) : GitRefspec*
+    fun git_remote_init_callbacks(opts : GitRemoteCallbacks*, version : UInt) : Int
+    fun git_remote_is_valid_name(remote_name : Char*) : Int
+    fun git_remote_list(_out : GitStrarray*, repo : GitRepository*) : Int
+    fun git_remote_lookup(_out : GitRemote**, repo : GitRepository*, name : Char*) : Int
+    fun git_remote_ls(_out : GitRemoteHead***, size : SizeT, remote : GitRemote*) : Int
+    fun git_remote_name(remote : GitRemote*) : Char*
+    fun git_remote_owner(remote : GitRemote*) : GitRepository*
+    fun git_remote_prune(remote : GitRemote*, callbacks : GitRemoteCallbacks*) : Int
+    fun git_remote_prune_refs(remote : GitRemote*) : Int
+    fun git_remote_push(remote : GitRemote*, refspecs : GitStrarray*, opts : GitPushOptions*) : Int
+    fun git_remote_pushurl(remote : GitRemote*) : Char*
+    fun git_remote_refspec_count(remote : GitRemote*) : SizeT
+    fun git_remote_rename(problems : GitStrarray*, repo : GitRepository*, name : Char*, new_name : Char*) : Int
+    fun git_remote_set_autotag(repo : GitRepository*, remote : Char*, value : GitRemoteAutotagOptionT) : Int
+    fun git_remote_set_pushurl(repo : GitRepository*, remote : Char*, url : Char*) : Int
+    fun git_remote_set_url(repo : GitRepository*, remote : Char*, url : Char*) : Int
+    fun git_remote_stats(remote : GitRemote*) : GitIndexerProgress*
+    fun git_remote_stop(remote : GitRemote*) : Int
+    fun git_remote_update_tips(remote : GitRemote*, callbacks : GitRemoteCallbacks*, update_fetchhead : Int, download_tags : GitRemoteAutotagOptionT, reflog_message : Char*) : Int
+    fun git_remote_upload(remote : GitRemote*, refspecs : GitStrarray*, opts : GitPushOptions*) : Int
+    fun git_remote_url(remote : GitRemote*) : Char*
+
+    fun git_repository_commondir(repo : GitRepository*) : Char*
+    fun git_repository_config(_out : GitConfig**, repo : GitRepository*) : Int
+    fun git_repository_config_snapshot(_out : GitConfig**, repo : GitRepository*) : Int
+    fun git_repository_detach_head(repo : GitRepository*) : Int
+    fun git_repository_discover(_out : GitBuf*, start_path : Char*, across_fs : Int, ceiling_dirs : Char*) : Int
+    fun git_repository_fetchhead_foreach(repo : GitRepository*, callback : GitRepositoryFetchheadForeachCb, payload : Void*) : Int
+    fun git_repository_free(repo : GitRepository*) : Void
+    fun git_repository_get_namespace(repo : GitRepository*) : Char*
+    fun git_repository_hashfile(_out : GitOid*, repo : GitRepository*, path : Char*, type : GitObjectT, as_path : Char*) : Int
+    fun git_repository_head(_out : GitReference**, repo : GitRepository*) : Int
+    fun git_repository_head_detached(repo : GitRepository*) : Int
+    fun git_repository_head_detached_for_worktree(repo : GitRepository*, name : Char*) : Int
+    fun git_repository_head_for_worktree(_out : GitReference**, repo : GitRepository*, name : Char*) : Int
+    fun git_repository_head_unborn(repo : GitRepository*) : Int
+    fun git_repository_ident(name : Char**, email : Char**, repo : GitRepository*) : Int
+    fun git_repository_index(_out : GitIndex**, repo : GitRepository*) : Int
+    fun git_repository_init(_out : GitRepository**, path : Char*, is_bare : UInt) : Int
+    fun git_repository_init_ext(_out : GitRepository**, repo_path : Char*, opts : GitRepositoryInitOptions*) : Int
+    fun git_repository_init_options_init(opts : GitRepositoryInitOptions*, version : UInt) : Int
+    fun git_repository_is_bare(repo : GitRepository*) : Int
+    fun git_repository_is_empty(repo : GitRepository*) : Int
+    fun git_repository_is_shallow(repo : GitRepository*) : Int
+    fun git_repository_is_worktree(repo : GitRepository*) : Int
+    fun git_repository_item_path(_out : GitBuf*, repo : GitRepository*, item : GitRepositoryItemT) : Int
+    fun git_repository_mergehead_foreach(repo : GitRepository*, callback : GitRepositoryMergeheadForeachCb, payload : Void*) : Int
+    fun git_repository_message(_out : GitBuf*, repo : GitRepository*) : Int
+    fun git_repository_message_remove(repo : GitRepository*) : Int
+    fun git_repository_odb(_out : GitOdb**, repo : GitRepository*) : Int
+    fun git_repository_open(_out : GitRepository**, path : Char*) : Int
+    fun git_repository_open_bare(_out : GitRepository**, bare_path : Char*) : Int
+    fun git_repository_open_ext(_out : GitRepository**, path : Char*, flags : UInt, ceiling_dirs : Char*) : Int
+    fun git_repository_open_from_worktree(_out : GitRepository**, wt : GitWorktree*) : Int
+    fun git_repository_path(repo : GitRepository*) : Char*
+    fun git_repository_refdb(_out : GitRefdb**, repo : GitRepository*) : Int
+    fun git_repository_set_head(repo : GitRepository*, refname : Char*) : Int
+    fun git_repository_set_head_detached(repo : GitRepository*, committish : GitOid*) : Int
+    fun git_repository_set_head_detached_from_annotated(repo : GitRepository*, committish : GitAnnotatedCommit*) : Int
+    fun git_repository_set_ident(repo : GitRepository*, name : Char*, email : Char*) : Int
+    fun git_repository_set_namespace(repo : GitRepository*, nmspace : Char*) : Int
+    fun git_repository_set_workdir(repo : GitRepository*, workdir : Char*, update_gitlink : Int) : Int
+    fun git_repository_state(repo : GitRepository*) : Int
+    fun git_repository_state_cleanup(repo : GitRepository*) : Int
+    fun git_repository_workdir(repo : GitRepository*) : Char*
+    fun git_repository_wrap_odb(_out : GitRepository**, odb : GitOdb*) : Int
+
+    fun git_reset(repo : GitRepository*, target : GitObject*, reset_type : GitResetT, checkout_opts : GitCheckoutOptions*) : Int
+    fun git_reset_default(repo : GitRepository*, target : GitObject*, reset_type : GitResetT, pathspecs : GitStrarray*) : Int
+    fun git_reset_from_annotated(repo : GitRepository*, commit : GitAnnotatedCommit*, reset_type : GitResetT, checkout_opts : GitCheckoutOptions*) : Int
+
+    fun git_revert(repo : GitRepository*, commit : GitCommit*, given_opts : GitRevertOptions*) : Int
+    fun git_revert_commit(_out : GitIndex**, repo : GitRepository*, revert_commit : GitCommit*, our_commit : GitCommit*, mainline : UInt, merge_options : GitMergeOptions*) : Int
+    fun git_revert_options_init(opts : GitRevertOptions*, version : UInt) : Int
+
+    fun git_revparse(revspec : GitRevspec*, repo : GitRepository*, spec : Char*) : Int
+    fun git_revparse_ext(object_out : GitObject**, reference_out : GitReference**, repo : GitRepository*, spec : Char*) : Int
+    fun git_revparse_single(_out : GitObject**, repo : GitRepository*, spec : Char*) : Int
+
+    fun git_revwalk_add_hide_cb(walk : GitRevwalk*, hide_cb : GitRevwalkHideCb, payload : Void*) : Int
+    fun git_revwalk_free(walk : GitRevwalk*) : Void
+    fun git_revwalk_hide(walk : GitRevwalk*, commit_id : GitOid*) : Int
+    fun git_revwalk_hide_glob(walk : GitRevwalk*, glob : Char*) : Int
+    fun git_revwalk_hide_head(walk : GitRevwalk*) : Int
+    fun git_revwalk_hide_ref(walk : GitRevwalk*, refname : Char*) : Int
+    fun git_revwalk_new(_out : GitRevwalk**, repo : GitRepository*) : Int
+    fun git_revwalk_next(_out : GitOid*, walk : GitRevwalk*) : Int
+    fun git_revwalk_push(walk : GitRevwalk*, id : GitOid*) : Int
+    fun git_revwalk_push_glob(walk : GitRevwalk*, glob : Char*) : Int
+    fun git_revwalk_push_head(walk : GitRevwalk*) : Int
+    fun git_revwalk_push_range(walk : GitRevwalk*, range : Char*) : Int
+    fun git_revwalk_push_ref(walk : GitRevwalk*, refname : Char*) : Int
+    fun git_revwalk_repository(walk : GitRevwalk*) : GitRepository*
+    fun git_revwalk_reset(walker : GitRevwalk*) : Int
+    fun git_revwalk_simplify_first_parent(walk : GitRevwalk*) : Int
+    fun git_revwalk_sorting(walk : GitRevwalk*, sort_node : UInt) : Int
   end
 end
