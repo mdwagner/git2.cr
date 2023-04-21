@@ -2180,5 +2180,54 @@ module Git2
     fun git_transaction_set_reflog(tx : GitTransaction*, refname : Char*, reflog : GitReflog*) : Int
     fun git_transaction_set_symbolic_target(tx : GitTransaction*, refname : Char*, target : Char*, sig : GitSignature*, msg : Char*) : Int
     fun git_transaction_set_target(tx : GitTransaction*, refname : Char*, target : GitOid*, sig : GitSignature*, msg : Char*) : Int
+
+    fun git_tree_create_updated(_out : GitOid*, repo : GitRepository*, baseline : GitTree*, nupdates : SizeT, updates : GitTreeUpdate*) : Int
+    fun git_tree_dup(_out : GitTree**, source : GitOid*) : Int
+    fun git_tree_entry_byid(tree : GitTree*, id : GitOid*) : GitTreeEntry*
+    fun git_tree_entry_byindex(tree : GitTree*, idx : SizeT) : GitTreeEntry*
+    fun git_tree_entry_byname(tree : GitTree*, filename : Char*) : GitTreeEntry*
+    fun git_tree_entry_bypath(_out : GitTreeEntry**, root : GitTree*, path : Char*) : Int
+    fun git_tree_entry_cmp(e1 : GitTreeEntry*, e2 : GitTreeEntry*) : Int
+    fun git_tree_entry_filemode(entry : GitTreeEntry*) : GitFilemodeT
+    fun git_tree_entry_filemode_raw(entry : GitTreeEntry*) : GitFilemodeT
+    fun git_tree_entry_free(entry : GitTreeEntry*) : Void
+    fun git_tree_entry_id(entry : GitTreeEntry*) : GitOid*
+    fun git_tree_entry_name(entry : GitTreeEntry*) : Char*
+    fun git_tree_entry_to_object(object_out : GitObject**, repo : GitRepository*, entry : GitTreeEntry*) : Int
+    fun git_tree_entry_type(entry : GitTreeEntry*) : GitObjectT
+    fun git_tree_entrycount(tree : GitTree*) : SizeT
+    fun git_tree_free(tree : GitTree*) : Void
+    fun git_tree_id(tree : GitTree*) : GitOid*
+    fun git_tree_lookup(_out : GitTree**, repo : GitRepository*, id : GitOid*) : Int
+    fun git_tree_lookup_prefix(_out : GitTree**, repo : GitRepository*, id : GitOid*, len : SizeT) : Int
+    fun git_tree_owner(tree : GitTree*) : GitRepository*
+    fun git_tree_walk(tree : GitTree*, mode : GitTreewalkMode, callback : GitTreewalkCb, payload : Void*) : Int
+
+    fun git_treebuilder_clear(bid : GitTreebuilder*) : Int
+    fun git_treebuilder_entrycount(bid : GitTreebuilder*) : SizeT
+    fun git_treebuilder_filter(bid : GitTreebuilder*, filter : GitTreebuilderFilterCb, payload : Void*) : Int
+    fun git_treebuilder_free(bid : GitTreebuilder*) : Void
+    fun git_treebuilder_get(bid : GitTreebuilder*, filename : Char*) : GitTreeEntry*
+    fun git_treebuilder_insert(_out : GitTreeEntry**, bid : GitTreebuilder*, filename : Char*, id : GitOid*, filemode : GitFilemodeT) : Int
+    fun git_treebuilder_new(_out : GitTreebuilder**, repo : GitRepository*, source : GitTree*) : Int
+    fun git_treebuilder_remove(bid : GitTreebuilder*, filename : Char*) : Int
+    fun git_treebuilder_write(id : GitOid*, bid : GitTreebuilder*) : Int
+    fun git_treebuilder_write_with_buffer(oid : GitOid*, bid : GitTreebuilder*, tree : GitBuf*) : Int
+
+    fun git_worktree_add(_out : GitWorktree**, repo : GitRepository*, name : Char*, path : Char*, opts : GitWorktreeAddOptions*) : Int
+    fun git_worktree_add_options_init(opts : GitWorktreeAddOptions*, version : UInt) : Int
+    fun git_worktree_free(wt : GitWorktree*) : Void
+    fun git_worktree_is_locked(reason : GitBuf*, wt : GitWorktree*) : Int
+    fun git_worktree_is_prunable(wt : GitWorktree*, opts : GitWorktreePruneOptions*) : Int
+    fun git_worktree_list(_out : GitStrarray*, repo : GitRepository*) : Int
+    fun git_worktree_lock(wt : GitWorktree*, reason : Char*) : Int
+    fun git_worktree_lookup(_out : GitWorktree**, repo : GitRepository*, name : Char*) : Int
+    fun git_worktree_name(wt : GitWorktree*) : Char*
+    fun git_worktree_open_from_repository(_out : GitWorktree**, repo : GitRepository*) : Int
+    fun git_worktree_path(wt : GitWorktree*) : Char*
+    fun git_worktree_prune(wt : GitWorktree*, opts : GitWorktreePruneOptions*) : Char*
+    fun git_worktree_prune_options_init(opts : GitWorktreePruneOptions*, version : UInt) : Int
+    fun git_worktree_unlock(wt : GitWorktree*) : Int
+    fun git_worktree_validate(wt : GitWorktree*) : Int
   end
 end
