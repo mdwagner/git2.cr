@@ -2113,5 +2113,72 @@ module Git2
     fun git_strarray_copy(tgt : GitStrarray*, src : GitStrarray*) : Int
     fun git_strarray_dispose(array : GitStrarray*) : Void
     fun git_strarray_free(array : GitStrarray*) : Void
+
+    fun git_submodule_add_finalize(submodule : GitSubmodule*) : Int
+    fun git_submodule_add_setup(_out : GitSubmodule**, repo : GitRepository*, url : Char*, path : Char*, use_gitlink : Int) : Int
+    fun git_submodule_add_to_index(submodule : GitSubmodule*, write_index : Int) : Int
+    fun git_submodule_branch(submodule : GitSubmodule*) : Char*
+    fun git_submodule_clone(_out : GitRepository**, submodule : GitSubmodule*, opts : GitSubmoduleUpdateOptions*) : Int
+    fun git_submodule_fetch_recurse_submodules(submodule : GitSubmodule*) : GitSubmoduleRecurseT
+    fun git_submodule_foreach(repo : GitRepository*, callback : GitSubmoduleCb, payload : Void*) : Int
+    fun git_submodule_free(submodule : GitSubmodule*) : Void
+    fun git_submodule_head_id(submodule : GitSubmodule*) : GitOid*
+    fun git_submodule_ignore(submodule : GitSubmodule*) : GitSubmoduleIgnoreT
+    fun git_submodule_index_id(submodule : GitSubmodule*) : GitOid*
+    fun git_submodule_init(submodule : GitSubmodule*, overwrite : Int) : Int
+    fun git_submodule_location(location_status : UInt*, submodule : GitSubmodule*) : Int
+    fun git_submodule_lookup(_out : GitSubmodule**, repo : GitRepository*, name : Char*) : Int
+    fun git_submodule_name(submodule : GitSubmodule*) : Char*
+    fun git_submodule_open(repo : GitRepository**, submodule : GitSubmodule*) : Int
+    fun git_submodule_owner(submodule : GitSubmodule*) : GitRepository*
+    fun git_submodule_path(submodule : GitSubmodule*) : Char*
+    fun git_submodule_reload(submodule : GitSubmodule*, force : Int) : Int
+    fun git_submodule_repo_init(_out : GitRepository**, sm : GitSubmodule*, use_gitlink : Int) : Int
+    fun git_submodule_resolve_url(_out : GitBuf*, repo : GitRepository*, url : Char*) : Int
+    fun git_submodule_set_branch(repo : GitRepository*, name : Char*, branch : Char*) : Int
+    fun git_submodule_set_fetch_recurse_submodules(repo : GitRepository*, name : Char*, fetch_recurse_submodules : GitSubmoduleRecurseT) : Int
+    fun git_submodule_set_ignore(repo : GitRepository*, name : Char*, ignore : GitSubmoduleIgnoreT) : Int
+    fun git_submodule_set_update(repo : GitRepository*, name : Char*, update : GitSubmoduleUpdateT) : Int
+    fun git_submodule_set_url(repo : GitRepository*, name : Char*, url : Char*) : Int
+    fun git_submodule_status(status : UInt*, repo : GitRepository*, name : Char*, ignore : GitSubmoduleIgnoreT) : Int
+    fun git_submodule_sync(submodule : GitSubmodule*) : Int
+    fun git_submodule_update(submodule : GitSubmodule*, init : Int, options : GitSubmoduleUpdateOptions*) : Int
+    fun git_submodule_update_options_init(opts : GitSubmoduleUpdateOptions*, version : UInt) : Int
+    fun git_submodule_update_strategy(submodule : GitSubmodule*) : GitSubmoduleUpdateT
+    fun git_submodule_url(submodule : GitSubmodule*) : Char*
+    fun git_submodule_wd_id(submodule : GitSubmodule*) : GitOid*
+
+    fun git_tag_annotation_create(oid : GitOid*, repo : GitRepository*, tag_name : Char*, target : GitObject*, tagger : GitSignature*, message : Char*) : Int
+    fun git_tag_create(oid : GitOid*, repo : GitRepository*, tag_name : Char*, target : GitObject*, tagger : GitSignature*, message : Char*, force : Int) : Int
+    fun git_tag_create_from_buffer(oid : GitOid*, repo : GitRepository*, buffer : Char*, force : Int) : Int
+    fun git_tag_create_lightweight(oid : GitOid*, repo : GitRepository*, tag_name : Char*, target : GitObject*, force : Int) : Int
+    fun git_tag_delete(repo : GitRepository*, tag_name : Char*) : Int
+    fun git_tag_dup(_out : GitTag**, source : GitTag*) : Int
+    fun git_tag_foreach(repo : GitRepository*, callback : GitTagForeachCb, payload : Void*) : Int
+    fun git_tag_free(tag : GitTag*) : Void
+    fun git_tag_id(tag : GitTag*) : GitOid*
+    fun git_tag_list(tag_names : GitStrarray*, repo : GitRepository*) : Int
+    fun git_tag_list_match(tag_names : GitStrarray*, pattern : Char*, repo : GitRepository*) : Int
+    fun git_tag_lookup(_out : GitTag**, repo : GitRepository*, id : GitOid*) : Int
+    fun git_tag_lookup_prefix(_out : GitTag**, repo : GitRepository*, id : GitOid*, len : SizeT) : Int
+    fun git_tag_message(tag : GitTag*) : Char*
+    fun git_tag_name(tag : GitTag*) : Char*
+    fun git_tag_owner(tag : GitTag*) : GitRepository*
+    fun git_tag_peel(tag_target_out : GitObject**, tag : GitTag*) : Int
+    fun git_tag_tagger(tag : GitTag*) : GitSignature*
+    fun git_tag_target(target_out : GitObject**, tag : GitTag*) : Int
+    fun git_tag_target_id(tag : GitTag*) : GitOid*
+    fun git_tag_target_type(tag : GitTag*) : GitObjectT
+
+    fun git_trace_set(level : GitTraceLevelT, cb : GitTraceCb) : Int
+
+    fun git_transaction_commit(tx : GitTransaction*) : Int
+    fun git_transaction_free(tx : GitTransaction*) : Void
+    fun git_transaction_lock_ref(tx : GitTransaction*, refname : Char*) : Int
+    fun git_transaction_new(_out : GitTransaction**, repo : GitRepository*) : Int
+    fun git_transaction_remove(tx : GitTransaction*, refname : Char*) : Int
+    fun git_transaction_set_reflog(tx : GitTransaction*, refname : Char*, reflog : GitReflog*) : Int
+    fun git_transaction_set_symbolic_target(tx : GitTransaction*, refname : Char*, target : Char*, sig : GitSignature*, msg : Char*) : Int
+    fun git_transaction_set_target(tx : GitTransaction*, refname : Char*, target : GitOid*, sig : GitSignature*, msg : Char*) : Int
   end
 end
