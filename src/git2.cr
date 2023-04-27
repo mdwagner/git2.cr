@@ -62,7 +62,7 @@ module Git2
     # Getting several times the same level from the same parent multi-level config
     # will return different config instances, but containing the same config_file
     # instance.
-    def self.open_level(parent : Config, level : LibGit2::GitConfigLevelT) : Config
+    def self.open_level(parent : Config, level : GitConfigLevelT) : Config
       code = LibGit2.git_config_open_level(out config, parent, level)
       Helpers.check_error(code, "Failed to build single-level focused config")
       new(config)
@@ -124,7 +124,7 @@ module Git2
       self.class.open_global(self)
     end
 
-    def open_level(level : LibGit2::GitConfigLevelT) : Config
+    def open_level(level : GitConfigLevelT) : Config
       self.class.open_level(self, level)
     end
 
