@@ -6,6 +6,9 @@ authors:
 
 crystal: ">= 1.0.0"
 
+.crystalline:
+  main: src/git2.cr
+
 license: MIT
 
 libraries:
