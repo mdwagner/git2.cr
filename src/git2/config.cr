@@ -58,7 +58,7 @@ module Git2
     # any number different from 0.
     #
     # Valid values for false are: 'false', 'no', 'off', 0.
-    def self.parse(value : String, type : Bool.class) : Bool
+    def self.parse(value : String, _type : Bool.class) : Bool
       Error.check!(LibGit2.git_config_parse_bool(out result, value))
       result == 1
     end
@@ -68,7 +68,7 @@ module Git2
     # An optional value suffix of 'k', 'm', or 'g' will cause the
     # value to be multiplied by 1_024, 1_048_576, or
     # 1_073_741_824 prior to output.
-    def self.parse(value : String, type : Int32.class) : Int32
+    def self.parse(value : String, _type : Int32.class) : Int32
       Error.check!(LibGit2.git_config_parse_int32(out result, value))
       result
     end
@@ -78,7 +78,7 @@ module Git2
     # An optional value suffix of 'k', 'm', or 'g' will cause the
     # value to be multiplied by 1_024, 1_048_576, or
     # 1_073_741_824 prior to output.
-    def self.parse(value : String, type : Int64.class) : Int64
+    def self.parse(value : String, _type : Int64.class) : Int64
       Error.check!(LibGit2.git_config_parse_int64(out result, value))
       result
     end
@@ -90,7 +90,7 @@ module Git2
     # via `git_libgit2_opts()`.
     #
     # If the value does not begin with a tilde, the input will be returned.
-    def self.parse(value : String, type : Path.class) : Path
+    def self.parse(value : String, _type : Path.class) : Path
       Error.check!(LibGit2.git_config_parse_path(out buf, value))
       str = String.new(buf.ptr)
       Path.new(str)
