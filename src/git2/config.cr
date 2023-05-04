@@ -1,5 +1,59 @@
 module Git2
+  # An entry in a configuration file
+  #
+  # - _name_: Name of the entry (normalised)
+  # - _value_: String value of the entry
+  # - _include_depth_: Depth of includes where this variable was found
+  # - _level_: Which config file this was found in
+  record ConfigEntry,
+    name : String,
+    value : String,
+    include_depth : UInt32,
+    level : GitConfigLevelT do
+    def self.from(entry : LibGit2::GitConfigEntry*) : ConfigEntry
+      new(
+        name: String.new(entry.value.name),
+        value: String.new(entry.value.value),
+        include_depth: entry.value.include_depth,
+        level: entry.value.level
+      )
+    end
+  end
+
+  class ConfigIterator
+    include Iterator(ConfigEntry)
+
+    @config_iter : LibGit2::GitConfigIterator*
+
+    protected def initialize(config : Config, regex : Regex? = nil)
+      iter = uninitialized LibGit2::GitConfigIterator*
+      if r = regex
+        Error.check! LibGit2.git_config_iterator_glob_new(pointerof(iter), config, r.source)
+      else
+        Error.check! LibGit2.git_config_iterator_new(pointerof(iter), config)
+      end
+      @config_iter = iter
+    end
+
+    def next
+      Error.check! LibGit2.git_config_next(out entry, self)
+      ConfigEntry.from(entry)
+    rescue IteratorOverError
+      stop
+    end
+
+    def to_unsafe
+      @config_iter
+    end
+
+    def finalize
+      LibGit2.git_config_iterator_free(self)
+    end
+  end
+
   class Config
+    include Iterable(ConfigEntry)
+
     # Allocate a new config object
     #
     # This object is empty, so you have to add a file to it before
@@ -110,7 +164,7 @@ module Git2
       Path.new(String.new(buf.ptr))
     end
 
-    protected def initialize(@config : LibGit2::GitConfig*)
+    protected def initialize(@config : LibGit2::GitConfig*, @snapshot = false)
     end
 
     # See `Config.open_global`
@@ -152,6 +206,87 @@ module Git2
       Error.check! LibGit2.git_config_set_int64(self, name, value)
     end
 
+    # Get the value of a boolean config variable
+    #
+    # All config files will be looked into, in the order of their defined level.
+    # A higher level means a higher priority.
+    # The first occurrence of the variable will be returned here.
+    def [](name : String) : Bool
+      Error.check! LibGit2.git_config_get_bool(out result, self, name)
+      result > 0
+    end
+
+    # Get the value of a integer config variable
+    #
+    # All config files will be looked into, in the order of their defined level.
+    # A higher level means a higher priority.
+    # The first occurrence of the variable will be returned here.
+    def [](name : String) : Int32
+      Error.check! LibGit2.git_config_get_int32(out result, self, name)
+      result
+    end
+
+    # Get the value of a long integer config variable
+    #
+    # All config files will be looked into, in the order of their defined level.
+    # A higher level means a higher priority.
+    # The first occurrence of the variable will be returned here.
+    def [](name : String) : Int64
+      Error.check! LibGit2.git_config_get_int64(out result, self, name)
+      result
+    end
+
+    # Get the value of a string config variable
+    #
+    # All config files will be looked into, in the order of their defined level.
+    # A higher level means a higher priority.
+    # The first occurrence of the variable will be returned here.
+    def [](name : String) : String
+      if @snapshot
+        Error.check! LibGit2.git_config_get_string(out str, self, name)
+        String.new(str)
+      else
+        Error.check! LibGit2.git_config_get_string_buf(out buf, self, name)
+        String.new(buf.ptr)
+      end
+    end
+
+    # Get the value of a path config variable
+    #
+    # A leading '~' will be expanded to the global search path
+    # (which defaults to the user's home directory but can be overridden
+    # via `git_libgit2_opts()`.
+    #
+    # All config files will be looked into, in the order of their defined level.
+    # A higher level means a higher priority.
+    # The first occurrence of the variable will be returned here.
+    def [](name : String) : Path
+      Error.check! LibGit2.git_config_get_int64(out buf, self, name)
+      Path.new(String.new(buf.ptr))
+    end
+
+    # Get the `ConfigEntry` of a config variable
+    def [](name : String) : ConfigEntry
+      Error.check! LibGit2.git_config_get_entry(out entry, self, name)
+      begin
+        ConfigEntry.from(entry)
+      ensure
+        LibGit2.git_config_entry_free(entry)
+      end
+    end
+
+    def get_multivar_foreach(name : String, regex : Regex? = nil, &block : ConfigEntry ->) : Nil
+      boxed_data = Box(typeof(block)).box(block)
+      Error.check! LibGit2.git_config_get_multivar_foreach(self, name, regex ? regex.source : nil,->(entry, payload) {
+        begin
+          Box(typeof(block)).unbox(payload).call(ConfigEntry.from(entry))
+          0
+        rescue
+          -1
+        end
+      }, boxed_data)
+    end
+
     # Set a multivar in the local config file
     #
     # The regex is applied case-sensitively on the value.
@@ -172,12 +307,20 @@ module Git2
       Error.check! LibGit2.git_config_delete_multivar(self, name, regex.source)
     end
 
+    def each
+      ConfigIterator.new(self)
+    end
+
+    def each(regex : Regex)
+      ConfigIterator.new(self, regex)
+    end
+
     # Perform an operation on each config variable
-    def each(&block : ConfigEntry ->) : Nil
+    def foreach(&block : ConfigEntry ->) : Nil
       boxed_data = Box(typeof(block)).box(block)
       Error.check! LibGit2.git_config_foreach(self, ->(entry, payload) {
         begin
-          Box(typeof(block)).unbox(payload).call(ConfigEntry.new(entry))
+          Box(typeof(block)).unbox(payload).call(ConfigEntry.from(entry))
           0
         rescue
           -1
@@ -187,17 +330,17 @@ module Git2
 
     # Perform an operation on each config variable matching a regular expression
     #
-    # This behaves like `Config#each` with an additional filter of a regular expression
+    # This behaves like `Config#foreach` with an additional filter of a regular expression
     # that filters which config keys are passed to the callback.
     #
     # The regular expression is applied case-sensitively on the normalized form of the variable name:
     # - the section and variable parts are lower-cased
     # - the subsection is left unchanged
-    def each_match(regex : Regex, &block : ConfigEntry ->) : Nil
+    def foreach_match(regex : Regex, &block : ConfigEntry ->) : Nil
       boxed_data = Box(typeof(block)).box(block)
       Error.check! LibGit2.git_config_foreach_match(self, regex.source, ->(entry, payload) {
         begin
-          Box(typeof(block)).unbox(payload).call(ConfigEntry.new(entry))
+          Box(typeof(block)).unbox(payload).call(ConfigEntry.from(entry))
           0
         rescue
           -1
@@ -212,7 +355,7 @@ module Git2
     # for looking up complex values (e.g. a remote, submodule).
     def snapshot : Config
       Error.check! LibGit2.git_config_snapshot(out snapshot_config, self)
-      Config.new(snapshot_config)
+      Config.new(snapshot_config, true)
     end
 
     def to_unsafe

@@ -22,7 +22,7 @@ describe Git2 do
     repo.config["user.name"] = "test"
     puts
     puts "Config Values"
-    repo.config.each do |entry|
+    repo.config.foreach do |entry|
       level = case entry.level
               when .git_config_level_global?
                 "Global"
