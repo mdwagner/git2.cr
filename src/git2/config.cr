@@ -211,7 +211,7 @@ module Git2
     # All config files will be looked into, in the order of their defined level.
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
-    def [](name : String) : Bool
+    def [](name : String, _type : Bool.class) : Bool
       Error.check! LibGit2.git_config_get_bool(out result, self, name)
       result > 0
     end
@@ -221,7 +221,7 @@ module Git2
     # All config files will be looked into, in the order of their defined level.
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
-    def [](name : String) : Int32
+    def [](name : String, _type : Int32.class) : Int32
       Error.check! LibGit2.git_config_get_int32(out result, self, name)
       result
     end
@@ -231,7 +231,7 @@ module Git2
     # All config files will be looked into, in the order of their defined level.
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
-    def [](name : String) : Int64
+    def [](name : String, _type : Int64.class) : Int64
       Error.check! LibGit2.git_config_get_int64(out result, self, name)
       result
     end
@@ -241,7 +241,7 @@ module Git2
     # All config files will be looked into, in the order of their defined level.
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
-    def [](name : String) : String
+    def [](name : String, _type : String.class) : String
       if @snapshot
         Error.check! LibGit2.git_config_get_string(out str, self, name)
         String.new(str)
@@ -260,13 +260,13 @@ module Git2
     # All config files will be looked into, in the order of their defined level.
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
-    def [](name : String) : Path
+    def [](name : String, _type : Path.class) : Path
       Error.check! LibGit2.git_config_get_int64(out buf, self, name)
       Path.new(String.new(buf.ptr))
     end
 
     # Get the `ConfigEntry` of a config variable
-    def [](name : String) : ConfigEntry
+    def [](name : String, _type : ConfigEntry.class) : ConfigEntry
       Error.check! LibGit2.git_config_get_entry(out entry, self, name)
       begin
         ConfigEntry.from(entry)
@@ -277,7 +277,7 @@ module Git2
 
     def get_multivar_foreach(name : String, regex : Regex? = nil, &block : ConfigEntry ->) : Nil
       boxed_data = Box(typeof(block)).box(block)
-      Error.check! LibGit2.git_config_get_multivar_foreach(self, name, regex ? regex.source : nil,->(entry, payload) {
+      Error.check! LibGit2.git_config_get_multivar_foreach(self, name, regex.try(&.source),->(entry, payload) {
         begin
           Box(typeof(block)).unbox(payload).call(ConfigEntry.from(entry))
           0
