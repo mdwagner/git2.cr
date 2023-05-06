@@ -16,7 +16,7 @@ describe Git2 do
     end
   end
 
-  it "works?" do
+  it "works" do
     _email = "test@a.b.com"
     _name = "test"
 
@@ -30,8 +30,11 @@ describe Git2 do
     repo.shallow?.should eq(false)
     repo.worktree?.should eq(false)
 
-    config["user.name", String].should eq(_name)
-    config["user.email", String].should eq(_email)
+    config["user.name"].should eq(_name)
+    config["user.email"].should eq(_email)
+    config["core.bare"]?.should eq("false")
+    config["core.bare", Bool].should eq(false)
+    config["core.bares"]?.should eq(nil)
 
     sig = repo.signature
     sig.name.should eq(_name)
@@ -44,8 +47,9 @@ describe Git2 do
     # git config user.name "test"
 
     repo = Git2::Repository.init(Path.new(FileUtils.pwd))
-    repo.config["user.email"] = "test@a.b.com"
-    repo.config["user.name"] = "test"
+    config = repo.config
+    config["user.email"] = "test@a.b.com"
+    config["user.name"] = "test"
     sig = repo.signature
   end
 end

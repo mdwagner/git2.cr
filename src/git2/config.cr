@@ -248,7 +248,7 @@ module Git2
         Error.check! LibGit2.git_config_get_string(out str, self, name)
         String.new(str)
       else
-        self[name, ConfigEntry].value
+        self[name]
       end
     end
 
@@ -274,6 +274,18 @@ module Git2
       ensure
         LibGit2.git_config_entry_free(entry)
       end
+    end
+
+    # Get the value of a string config variable or raises
+    def [](name : String) : String
+      self[name, ConfigEntry].value
+    end
+
+    # Get the value of a string config variable or returns `nil`
+    def []?(name : String) : String?
+      self[name]
+    rescue
+      nil
     end
 
     def get_multivar_foreach(name : String, regex : Regex? = nil, &block : ConfigEntry ->) : Nil
