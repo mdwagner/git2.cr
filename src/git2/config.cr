@@ -20,14 +20,16 @@ module Git2
     end
   end
 
-  class ConfigIterator
+  private class ConfigIterator
     include Iterator(ConfigEntry)
 
     @config_iter : LibGit2::GitConfigIterator*
 
-    protected def initialize(config : Config, regex : Regex? = nil)
+    def initialize(config : Config, name : String? = nil, regex : Regex? = nil)
       iter = uninitialized LibGit2::GitConfigIterator*
-      if r = regex
+      if multivar_name = name
+        Error.check! LibGit2.git_config_multivar_iterator_new(pointerof(iter), config, multivar_name, regex.try(&.source))
+      elsif r = regex
         Error.check! LibGit2.git_config_iterator_glob_new(pointerof(iter), config, r.source)
       else
         Error.check! LibGit2.git_config_iterator_new(pointerof(iter), config)
@@ -246,8 +248,7 @@ module Git2
         Error.check! LibGit2.git_config_get_string(out str, self, name)
         String.new(str)
       else
-        Error.check! LibGit2.git_config_get_string_buf(out buf, self, name)
-        String.new(buf.ptr)
+        self[name, ConfigEntry].value
       end
     end
 
@@ -261,7 +262,7 @@ module Git2
     # A higher level means a higher priority.
     # The first occurrence of the variable will be returned here.
     def [](name : String, _type : Path.class) : Path
-      Error.check! LibGit2.git_config_get_int64(out buf, self, name)
+      Error.check! LibGit2.git_config_get_path(out buf, self, name)
       Path.new(String.new(buf.ptr))
     end
 
@@ -307,12 +308,23 @@ module Git2
       Error.check! LibGit2.git_config_delete_multivar(self, name, regex.source)
     end
 
+    # Returns an iterator over all the config variables
     def each
       ConfigIterator.new(self)
     end
 
+    # Returns an iterator over all the config variables whose name matches a pattern
+    #
+    # The regular expression is applied case-sensitively on the normalized form of the variable name:
+    # - the section and variable parts are lower-cased
+    # - the subsection is left unchanged
     def each(regex : Regex)
       ConfigIterator.new(self, regex)
+    end
+
+    # Returns an iterator over each value of a multivar
+    def each(name : String, regex : Regex? = nil)
+      ConfigIterator.new(self, name: name, regex: regex)
     end
 
     # Perform an operation on each config variable

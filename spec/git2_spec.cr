@@ -16,22 +16,36 @@ describe Git2 do
     end
   end
 
-  it "matches have_files/expectation.cr" do
+  it "works?" do
+    _email = "test@a.b.com"
+    _name = "test"
+
+    repo = Git2::Repository.init(Path.new(FileUtils.pwd))
+    config = repo.config
+    config["user.email"] = _email
+    config["user.name"] = _name
+
+    repo.bare?.should eq(false)
+    repo.empty?.should eq(true)
+    repo.shallow?.should eq(false)
+    repo.worktree?.should eq(false)
+
+    config["user.name", String].should eq(_name)
+    config["user.email", String].should eq(_email)
+
+    sig = repo.signature
+    sig.name.should eq(_name)
+    sig.email.should eq(_email)
+  end
+
+  pending "matches have_files/expectation.cr" do
+    # git init
+    # git config user.email "test@a.b.com"
+    # git config user.name "test"
+
     repo = Git2::Repository.init(Path.new(FileUtils.pwd))
     repo.config["user.email"] = "test@a.b.com"
     repo.config["user.name"] = "test"
-    puts
-    puts "Config Values"
-    repo.config.foreach do |entry|
-      level = case entry.level
-              when .git_config_level_global?
-                "Global"
-              when .git_config_level_local?
-                "Local"
-              end
-      puts "(#{level}) #{entry.name} => #{entry.value}"
-    end
-
-    true.should eq(true)
+    sig = repo.signature
   end
 end
