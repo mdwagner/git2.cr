@@ -1,6 +1,6 @@
 # git2
 
-Crystal bindings to libgit2
+Crystal bindings to [libgit2](https://libgit2.org/libgit2/#v1.1.0)
 
 ## Installation
 

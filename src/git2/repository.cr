@@ -46,6 +46,15 @@ module Git2
       Signature.default(self)
     end
 
+    # Get the Index file for this repository
+    #
+    # If a custom index has not been set, the default index for the repository
+    # will be returned (the one located in `.git/index`).
+    def index : Index
+      Error.check! LibGit2.git_repository_index(out index, self)
+      Index.new(index)
+    end
+
     def to_unsafe
       @repo
     end

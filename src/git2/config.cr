@@ -79,6 +79,7 @@ module Git2
     #
     # Git allows you to store your global configuration at `$HOME/.gitconfig`
     # or `$XDG_CONFIG_HOME/git/config`.
+    #
     # For backwards compatability, the XDG file shouldn't be used unless
     # the user has created it explicitly. This method opens the correct one
     # to write to.
@@ -91,6 +92,7 @@ module Git2
     #
     # The returned config object can be used to perform get/set/delete operations
     # on a single specific level.
+    #
     # Getting several times the same level from the same parent multi-level config
     # will return different config instances, but containing the same config_file
     # instance.
@@ -112,7 +114,7 @@ module Git2
     #
     # The on-disk file pointed at by path will be opened and parsed;
     # it's expected to be a native Git config file following the
-    # default Git config syntax (see man git-config).
+    # default Git config syntax (see `man git-config`).
     #
     # If the file does not exist, the file will still be added and
     # it will be created the first time we write to it.
@@ -163,6 +165,44 @@ module Git2
     # If the value does not begin with a tilde, the input will be returned.
     def self.parse(value : String, _type : Path.class) : Path
       Error.check! LibGit2.git_config_parse_path(out buf, value)
+      Path.new(String.new(buf.ptr))
+    end
+
+    # Locate the path to the global configuration file
+    #
+    # The user or global configuration file is usually located in `$HOME/.gitconfig`.
+    #
+    # This method will try to guess the full path to that file, if the file exists.
+    #
+    # This method will not guess the path to the xdg compatible config file (`.config/git/config`).
+    def self.find_global : Path
+      Error.check! LibGit2.git_config_find_global(out buf)
+      Path.new(String.new(buf.ptr))
+    end
+
+    # Locate the path to the configuration file in ProgramData
+    #
+    # Look for the file in `%PROGRAMDATA%` used by portable git.
+    def self.find_programdata : Path
+      Error.check! LibGit2.git_config_find_programdata(out buf)
+      Path.new(String.new(buf.ptr))
+    end
+
+    # Locate the path to the system configuration file
+    #
+    # If `/etc/gitconfig` doesn't exist, it will look for `%PROGRAMFILES%`.
+    def self.find_system : Path
+      Error.check! LibGit2.git_config_find_system(out buf)
+      Path.new(String.new(buf.ptr))
+    end
+
+    # Locate the path to the global xdg compatible configuration file
+    #
+    # The xdg compatible configuration file is usually located in `$HOME/.config/git/config`.
+    #
+    # This method will try to guess the full path to that file, if the file exists.
+    def self.find_xdg : Path
+      Error.check! LibGit2.git_config_find_xdg(out buf)
       Path.new(String.new(buf.ptr))
     end
 
